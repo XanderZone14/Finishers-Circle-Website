@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Finishers Circle | Gallery</title>
+  <link rel="stylesheet" href="gallery.css" />
+  <!-- optional: keep site fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- NAVBAR (keeps same style as site) -->
+  <header class="main-header">
+    <div class="nav-left">
+      <a href="index.html"><img src="media/mini-logo.png" alt="Finishers Circle" class="nav-logo"></a>
+    </div>
+    <nav class="navbar">
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="index.html#about">About</a></li>
+        <li><a href="index.html#tournaments">Tournaments</a></li>
+        <li><a href="gallery.html" class="active">Gallery</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- GALLERY HERO (black & white background) -->
+  <section class="gallery-hero">
+    <div class="hero-inner">
+      <h1>Finishers Circle — Gallery</h1>
+      <p>Relive the most brutal, beautiful moments from our tournaments.</p>
+    </div>
+  </section>
+
+  <!-- MASONRY GRID -->
+  <main class="container">
+    <section class="gallery-grid" id="galleryGrid">
+      <!-- Add/replace image items below with your own filenames -->
+      <figure class="gallery-item">
+        <img data-src="media/gallery1.jpg" alt="Tournament action 1" class="lazy">
+      </figure>
+      <figure class="gallery-item">
+        <img data-src="media/gallery2.jpg" alt="Tournament action 2" class="lazy">
+      </figure>
+      <figure class="gallery-item">
+        <img data-src="media/gallery3.jpg" alt="Tournament action 3" class="lazy">
+      </figure>
+      <figure class="gallery-item">
+        <img data-src="media/gallery4.jpg" alt="Tournament action 4" class="lazy">
+      </figure>
+      <figure class="gallery-item">
+        <img data-src="media/gallery5.jpg" alt="Tournament action 5" class="lazy">
+      </figure>
+      <figure class="gallery-item">
+        <img data-src="media/gallery6.jpg" alt="Tournament action 6" class="lazy">
+      </figure>
+      <figure class="gallery-item">
+        <img data-src="media/gallery7.jpg" alt="Tournament action 7" class="lazy">
+      </figure>
+      <figure class="gallery-item">
+        <img data-src="media/gallery8.jpg" alt="Tournament action 8" class="lazy">
+      </figure>
+      <figure class="gallery-item">
+        <img data-src="media/gallery9.jpg" alt="Tournament action 9" class="lazy">
+      </figure>
+      <figure class="gallery-item">
+        <img data-src="media/gallery10.jpg" alt="Tournament action 10" class="lazy">
+      </figure>
+      <figure class="gallery-item">
+        <img data-src="media/gallery11.jpg" alt="Tournament action 11" class="lazy">
+      </figure>
+      <figure class="gallery-item">
+        <img data-src="media/gallery12.jpg" alt="Tournament action 12" class="lazy">
+      </figure>
+      <!-- Duplicate more <figure> blocks as needed -->
+    </section>
+  </main>
+
+  <!-- LIGHTBOX -->
+  <div id="lightbox" class="lightbox" aria-hidden="true" role="dialog" aria-label="Image viewer">
+    <button class="lb-close" aria-label="Close (Esc)">&times;</button>
+    <button class="lb-prev" aria-label="Previous image" title="Previous">&larr;</button>
+    <div class="lb-stage">
+      <div class="lb-spinner" aria-hidden="true"></div>
+      <img class="lb-img" src="" alt="">
+    </div>
+    <button class="lb-next" aria-label="Next image" title="Next">&rarr;</button>
+  </div>
+
+  <script src="gallery.js"></script>
+</body>
+</html>

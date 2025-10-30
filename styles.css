@@ -1,0 +1,400 @@
+/* ----------- GLOBAL RESET ----------- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: #000;
+  color: #fff;
+  font-family: 'Oswald', sans-serif;
+  overflow-x: hidden;
+}
+
+/* ----------- NAVBAR ----------- */
+.main-header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: #000;
+  border-bottom: 1px solid red;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 60px;
+  z-index: 1000;
+}
+
+.nav-logo {
+  width: 130px;
+  filter: drop-shadow(0 0 15px rgba(255, 0, 0, 0.8));
+}
+
+.navbar ul {
+  list-style: none;
+  display: flex;
+  gap: 40px;
+}
+
+.navbar a {
+  text-decoration: none;
+  color: red;
+  font-weight: 600;
+  transition: 0.3s ease;
+}
+
+.navbar a:hover {
+  text-shadow: 0 0 12px red;
+}
+
+/* Dropdown */
+.dropdown {
+  position: relative;
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 35px;
+  left: 0;
+  background: #000;
+  border: 1px solid red;
+  border-radius: 5px;
+  overflow: hidden;
+  z-index: 999;
+}
+
+.dropdown-menu li {
+  padding: 10px 20px;
+}
+
+.dropdown-menu li a {
+  color: red;
+  display: block;
+}
+
+.dropdown-menu li a:hover {
+  background: red;
+  color: black;
+}
+
+.dropdown.active .dropdown-menu {
+  display: block;
+}
+
+/* ----------- HERO SECTION ----------- */
+.hero {
+  position: relative;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding-bottom: 150px;
+}
+
+.background-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+
+/* SMOOTH BLACK FADE AT BOTTOM */
+.hero::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 250px;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0), #000);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 1;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 100%;
+}
+
+.main-logo {
+  width: 650px;
+  filter: drop-shadow(0 0 35px red);
+}
+
+.tagline {
+  margin-top: 20px;
+  font-size: 1.9rem;
+  color: #fff;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
+  font-family: 'Teko', sans-serif;
+  letter-spacing: 1px;
+}
+
+.hero-caption {
+  font-size: 1.1rem;
+  color: #ccc;
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.4);
+  margin-top: 10px;
+}
+
+/* Upcoming Tournament Button */
+.upcoming-btn {
+  margin-top: 50px;
+  z-index: 4;
+  padding: 14px 36px;
+  font-size: 1.3rem;
+  background: #ff0000;
+  color: #fff;
+  font-weight: 700;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+  position: relative;
+}
+
+@keyframes neonPulse {
+  0%, 100% { box-shadow: 0 0 20px rgba(255, 0, 0, 0.4); }
+  50% { box-shadow: 0 0 35px rgba(255, 0, 0, 0.9); }
+}
+
+.upcoming-btn:hover {
+  transform: scale(1.08);
+  animation: neonPulse 1.6s infinite;
+  background: #ff2222;
+}
+
+/* ----------- SECOND HERO ----------- */
+.second-hero {
+  position: relative;
+  height: 100vh;
+  width: 100%;
+  background: url('media/second-hero.jpg') center/cover no-repeat;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(50px);
+  transition: opacity 1.2s ease-out, transform 1.2s ease-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.second-hero.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.second-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom right, rgba(90,0,0,0.5), rgba(0,0,0,0.7));
+  z-index: 1;
+}
+
+.second-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  color: #fff;
+  padding: 0 30px;
+}
+
+.second-content h2 {
+  font-size: 3rem;
+  font-weight: 800;
+  color: red;
+  text-transform: uppercase;
+  text-shadow: 0 0 12px rgba(255, 0, 0, 0.7);
+  margin-bottom: 20px;
+}
+
+.second-content p {
+  font-size: 1.3rem;
+  color: #fff;
+  line-height: 1.6;
+  text-shadow: 0 0 6px rgba(255, 255, 255, 0.4);
+  max-width: 800px;
+  margin: 0 auto;
+  font-family: 'Teko', sans-serif;
+}
+
+/* ----------- ABOUT SECTION ----------- */
+.about-section {
+  position: relative;
+  background: url('media/about-hero.jpg') center/cover no-repeat;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+}
+
+.about-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(40, 40, 40, 0.6);
+  z-index: 1;
+}
+
+.about-container {
+  position: relative;
+  z-index: 2;
+  max-width: 900px;
+  padding: 40px;
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 1s ease-out, transform 1s ease-out;
+}
+
+.about-container.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.about-section h2 {
+  font-size: 3rem;
+  font-weight: 800;
+  color: red;
+  text-transform: uppercase;
+  text-shadow: 0 0 15px rgba(255, 0, 0, 0.8);
+  margin-bottom: 25px;
+}
+
+.about-section p {
+  font-size: 1.3rem;
+  line-height: 1.7;
+  color: #ddd;
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+  font-family: 'Teko', sans-serif;
+}
+
+/* ---------------- CONTACT SECTION ---------------- */
+.contact-section {
+  background: transparent;
+  padding: 100px 20px;
+  text-align: center;
+  border-top: 1px solid rgba(255, 0, 0, 0.2);
+}
+
+.contact-container h2 {
+  font-size: 2.2rem;
+  color: #ff0000;
+  text-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000;
+  margin-bottom: 20px;
+  letter-spacing: 2px;
+}
+
+.contact-container p {
+  font-size: 1.2rem;
+  color: #fff;
+  margin: 10px 0;
+}
+
+.contact-container a {
+  color: #ff0000;
+  text-decoration: none;
+  text-shadow: 0 0 8px #ff0000;
+  transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+.contact-container a:hover {
+  color: #fff;
+  text-shadow: 0 0 15px #ff0000, 0 0 25px #ff0000;
+}
+/* ---------------- CONTACT HERO BACKGROUND ---------------- */
+.contact-hero {
+  position: relative;
+  width: 100%;
+  height: auto;
+  overflow: hidden;
+}
+
+.contact-bg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(70%); /* Slightly darkens image for contrast, no grayscale */
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+}
+
+.contact-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.45); /* Soft black overlay */
+  z-index: 1;
+}
+
+.contact-section {
+  position: relative;
+  z-index: 2;
+  padding: 120px 20px;
+  text-align: center;
+}
+
+.contact-container h2 {
+  font-size: 3rem;
+  color: red;
+  text-shadow: 0 0 15px rgba(255, 0, 0, 0.8);
+  margin-bottom: 25px;
+  letter-spacing: 1px;
+}
+
+.contact-container p {
+  font-size: 1.3rem;
+  color: #fff;
+  margin: 12px 0;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+}
+
+.contact-container a {
+  color: red;
+  text-decoration: none;
+  text-shadow: 0 0 10px rgba(255, 0, 0, 0.8);
+  transition: all 0.3s ease;
+}
+
+.contact-container a:hover {
+  text-shadow: 0 0 20px red;
+}
+
