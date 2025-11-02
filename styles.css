@@ -146,8 +146,8 @@ body {
 .main-logo {
   width: 650px;
   filter: drop-shadow(0 0 35px red);
+  margin-top: 60px; /* ✅ pushes logo slightly lower */
 }
-
 .tagline {
   margin-top: 20px;
   font-size: 1.9rem;
@@ -398,3 +398,122 @@ body {
   text-shadow: 0 0 20px red;
 }
 
+/* ---------------- RESPONSIVE / MOBILE ---------------- */
+@media screen and (max-width: 768px) {
+  /* NAVBAR */
+  .main-header {
+    padding: 10px 30px;
+  }
+  .nav-logo {
+    width: 100px;
+  }
+  .navbar ul {
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .navbar a {
+    font-size: 0.9rem;
+  }
+
+  /* HERO */
+  .hero {
+    padding-bottom: 100px;
+  }
+  .main-logo {
+    width: 450px;
+  }
+  .tagline {
+    font-size: 1.5rem;
+  }
+  .hero-caption {
+    font-size: 1rem;
+  }
+  .upcoming-btn {
+    padding: 12px 28px;
+    font-size: 1.1rem;
+  }
+
+  /* SECOND HERO */
+  .second-content h2 {
+    font-size: 2.2rem;
+  }
+  .second-content p {
+    font-size: 1rem;
+    max-width: 90%;
+  }
+
+  /* ABOUT */
+  .about-section h2 {
+    font-size: 2rem;
+  }
+  .about-section p {
+    font-size: 1rem;
+  }
+
+  /* CONTACT */
+  .contact-container h2 {
+    font-size: 2rem;
+  }
+  .contact-container p {
+    font-size: 1rem;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  /* NAVBAR */
+  .main-header {
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 15px;
+  }
+  .navbar ul {
+    flex-direction: column;
+    gap: 15px;
+  }
+  .nav-logo {
+    width: 90px;
+  }
+
+  /* HERO */
+  .hero {
+    padding-bottom: 80px;
+  }
+  .main-logo {
+    width: 300px;
+  }
+  .tagline {
+    font-size: 1.2rem;
+  }
+  .hero-caption {
+    font-size: 0.9rem;
+  }
+  .upcoming-btn {
+    padding: 10px 22px;
+    font-size: 1rem;
+  }
+
+  /* SECOND HERO */
+  .second-content h2 {
+    font-size: 1.8rem;
+  }
+  .second-content p {
+    font-size: 0.9rem;
+  }
+
+  /* ABOUT */
+  .about-section h2 {
+    font-size: 1.5rem;
+  }
+  .about-section p {
+    font-size: 0.9rem;
+  }
+
+  /* CONTACT */
+  .contact-container h2 {
+    font-size: 1.8rem;
+  }
+  .contact-container p {
+    font-size: 0.9rem;
+  }
+}
