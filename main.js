@@ -768,16 +768,25 @@ function initScrollProgress() {
 }
 
 /* ── Section reveals ── */
+
+// Force all animated section elements visible (used on mobile + RM)
+function revealAllImmediate() {
+  ['.stat-item', '.tournament-card', '.or-label', '.or-title', '.or-body',
+   '.about-preview-text', '.about-preview-emblem', '.quote-text', '.quote-author',
+   '.cta-inner', '.preview-item', '.gallery-cta-wrap', '.footer-grid',
+   '.reveal-up', '.reveal-stagger .reveal-item'
+  ].forEach(sel => qsa(sel).forEach(e => { e.style.opacity = '1'; e.style.transform = 'none'; }));
+}
+
 function initSectionReveals() {
-  if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined' || RM) {
-    // No GSAP → everything stays at its natural CSS visibility (opacity:1)
+  // On mobile or without GSAP: skip all animations, show everything now.
+  // iOS Safari's ScrollTrigger behaviour after a pinned globe intro is
+  // unreliable — elements with CSS opacity:0 would stay invisible forever.
+  if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined' || RM || isMobile()) {
+    revealAllImmediate();
     return;
   }
 
-  // Using gsap.from() with immediateRender:false means elements stay at
-  // their natural CSS state (visible) until the scroll trigger actually
-  // fires. This prevents the "all-black invisible sections" bug where
-  // fromTo applied opacity:0 inline and ScrollTrigger never reversed it.
   const reveal = (selector, opts = {}) => {
     const els = qsa(selector);
     if (!els.length) return;
