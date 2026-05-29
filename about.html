@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About &amp; Mission | Finishers Circle</title>
+  <meta name="description" content="The story behind Finishers Circle — Belize's premier submission-only tournament series and the first platform in Central America that pays its athletes." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Source+Sans+3:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- ARENA CANVAS -->
+<canvas id="arenaCanvas" class="arena-bg" aria-hidden="true"></canvas>
+
+<!-- SITE WRAPPER -->
+<div id="siteWrapper" class="site-wrapper">
+
+  <!-- FILM GRAIN -->
+  <div class="noise-overlay" aria-hidden="true"></div>
+
+  <!-- SCROLL PROGRESS -->
+  <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+
+  <!-- CUSTOM CURSOR -->
+  <div id="cursor" aria-hidden="true"></div>
+  <div id="cursor-follower" aria-hidden="true"></div>
+
+  <!-- HEADER -->
+  <header class="main-header" id="mainHeader">
+    <a href="index.html" class="nav-brand">
+      <img src="media/mini-logo.png" alt="Finishers Circle" class="nav-logo">
+    </a>
+    <nav class="navbar" id="mainNav" aria-label="Main navigation">
+      <ul class="nav-list">
+        <li><a href="index.html" class="nav-link arena-trigger" data-view="center">Home</a></li>
+        <li><a href="about.html" class="nav-link active arena-trigger" data-view="sideline">About</a></li>
+        <li><a href="index.html#tournaments" class="nav-link arena-trigger" data-view="corner">Tournaments</a></li>
+        <li><a href="gallery.html" class="nav-link arena-trigger" data-view="elevated">Gallery</a></li>
+        <li><a href="registration.html" class="nav-link arena-trigger" data-view="entrance">Register</a></li>
+        <li><a href="contact.html" class="nav-link arena-trigger" data-view="sideline">Contact</a></li>
+      </ul>
+    </nav>
+    <a href="registration.html" class="nav-register-btn">Register Now</a>
+    <button class="hamburger" id="hamburger" aria-label="Open navigation" aria-expanded="false" aria-controls="mobileMenu">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true" role="dialog">
+    <button class="mobile-close" id="mobileClose" aria-label="Close navigation">
+      <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <nav>
+      <ul class="mobile-nav-list">
+        <li><a href="index.html" class="mobile-nav-link">Home</a></li>
+        <li><a href="about.html" class="mobile-nav-link">About</a></li>
+        <li><a href="index.html#tournaments" class="mobile-nav-link">Tournaments</a></li>
+        <li><a href="gallery.html" class="mobile-nav-link">Gallery</a></li>
+        <li><a href="registration.html" class="mobile-nav-link">Register</a></li>
+        <li><a href="contact.html" class="mobile-nav-link">Contact</a></li>
+      </ul>
+    </nav>
+    <a href="registration.html" class="mobile-register-btn">Register Now</a>
+  </div>
+  <div class="mobile-backdrop" id="mobileBackdrop" aria-hidden="true"></div>
+
+  <!-- PAGE HERO -->
+  <section class="page-hero" aria-label="About hero">
+    <div class="page-hero-inner container">
+      <span class="section-label">Who We Are</span>
+      <h1 class="page-hero-title">ABOUT &amp; <span class="text-red">MISSION</span></h1>
+      <p class="page-hero-sub">The Story Behind the Circle</p>
+    </div>
+  </section>
+
+  <!-- OUR STORY -->
+  <section class="inner-section" id="story">
+    <div class="container inner-grid">
+      <div class="inner-text">
+        <span class="section-label reveal-up">Our Story</span>
+        <h2 class="section-title reveal-up">HOW IT ALL <span class="text-red">BEGAN</span></h2>
+        <p class="body-text reveal-up">
+          Finishers Circle was born from a simple, uncompromising belief: the sport of submission grappling deserves better in Central America. For too long, athletes in Belize and across the region had nowhere to compete at a level that matched their dedication, their sacrifice, and their skill.
+        </p>
+        <p class="body-text reveal-up">
+          We saw fighters training daily — sometimes twice a day — under brutal heat, with limited equipment, against all odds, yet never getting the recognition or the real competitive platform their work demanded. The existing tournament landscape was built around points systems that rewarded stalling, passive play, and politics over pure fighting ability. That wasn't good enough.
+        </p>
+        <p class="body-text reveal-up">
+          So we built something different. Something honest. Something that puts the athlete first.
+        </p>
+        <p class="body-text reveal-up">
+          <strong class="text-gold">We are the first platform in Central America to pay our athletes for their performance.</strong> When you finish your opponent, you earn — because that's what the sport deserves. A rear naked choke lands different when there's real money behind it. A triangle choke means more when you know it takes food off someone else's table and puts it on yours. Finishers Circle is where grappling becomes a career, not just a hobby.
+        </p>
+      </div>
+      <div class="inner-emblem" aria-hidden="true">
+        <div class="emblem-ring emblem-ring-1"></div>
+        <div class="emblem-ring emblem-ring-2"></div>
+        <div class="emblem-ring emblem-ring-3"></div>
+        <img src="media/main-logo.png" alt="" class="emblem-logo">
+      </div>
+    </div>
+  </section>
+
+  <!-- MISSION PILLARS -->
+  <section class="inner-section pillars-section" id="mission">
+    <div class="container">
+      <header class="section-header">
+        <span class="section-label">What We Stand For</span>
+        <h2 class="section-title">OUR <span class="text-red">MISSION</span></h2>
+        <p class="section-desc">Three pillars drive everything we do. No exceptions. No compromise.</p>
+      </header>
+      <div class="pillars-grid reveal-stagger">
+        <div class="pillar-card tilt-card reveal-item">
+          <div class="pillar-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+            </svg>
+          </div>
+          <h3 class="pillar-title">Submission Excellence</h3>
+          <p class="pillar-body">Every event is 100% submission only. No points. No decisions. If you want to win, you finish. We hold this standard at every bracket, every division, every round — no exceptions. The format forces athletes to attack, evolve, and perform at their absolute peak.</p>
+        </div>
+        <div class="pillar-card tilt-card reveal-item">
+          <div class="pillar-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M12 6v6l4 2"/>
+              <path d="M8 14s1 2 4 2 4-2 4-2"/>
+            </svg>
+          </div>
+          <h3 class="pillar-title">Athlete Compensation</h3>
+          <p class="pillar-body">We pioneered athlete pay in Central America. Winners earn real money for real submissions. We believe fighters who dedicate their lives to the craft deserve financial recognition. The prize pool grows with every tournament as the community grows with us.</p>
+        </div>
+        <div class="pillar-card tilt-card reveal-item">
+          <div class="pillar-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M23 21v-2a4 4 0 00-3-3.87"/>
+              <path d="M16 3.13a4 4 0 010 7.75"/>
+            </svg>
+          </div>
+          <h3 class="pillar-title">Community Growth</h3>
+          <p class="pillar-body">Finishers Circle exists to grow grappling culture in Belize and Central America. We work with local gyms, coaches, and athletes to build a sustainable ecosystem — one where the next generation has a stage, a standard, and a path forward in the sport they love.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY SUBMISSION ONLY -->
+  <section class="inner-section why-section" id="why">
+    <div class="container why-inner">
+      <div class="why-text">
+        <span class="section-label reveal-up">The Philosophy</span>
+        <h2 class="section-title reveal-up">WHY <span class="text-red">SUBMISSION ONLY?</span></h2>
+        <p class="body-text reveal-up">
+          Points-based grappling rewards playing it safe. A fighter can win by pulling guard and stalling for twelve minutes. They can win by securing a single takedown and defending for the rest of the match. They can win without ever trying to finish — without ever truly putting themselves on the line.
+        </p>
+        <p class="body-text reveal-up">
+          That's not fighting. That's gaming a system.
+        </p>
+        <p class="body-text reveal-up">
+          Submission-only rules strip all of that away. There is nowhere to hide. You must attack. You must take risks. You must commit to the finish or go home with nothing. This format rewards technique, creativity, and genuine grappling ability — not stall tactics and judge manipulation.
+        </p>
+        <p class="body-text reveal-up">
+          It also makes for better competition to watch. Fans understand a rear naked choke. They understand a heel hook, an armbar, a guillotine. There's no scorecard to argue about, no controversial decision. The mat tells the truth every single time.
+        </p>
+        <p class="body-text reveal-up">
+          Submission-only is also the purest link to grappling's origins — Judo, Wrestling, Brazilian Jiu-Jitsu, Catch Wrestling. The goal has always been to control and submit your opponent. We honor that tradition while building something new for Belize.
+        </p>
+        <div class="or-callout reveal-up">
+          <div class="or-number-sm" aria-hidden="true">01</div>
+          <div class="or-callout-text">
+            <div class="or-label">ONE RULE:</div>
+            <div class="or-title-sm">FINISH.</div>
+          </div>
+        </div>
+      </div>
+      <div class="why-quote-col">
+        <figure class="why-quote-block reveal-up">
+          <blockquote>
+            "Points tell you who played safer. Submissions tell you who was better."
+          </blockquote>
+          <figcaption>— The Finishers Circle Standard</figcaption>
+        </figure>
+        <figure class="why-quote-block reveal-up">
+          <blockquote>
+            "Every round, every match, every position — attack. There is no other option."
+          </blockquote>
+          <figcaption>— Finishers Circle Athlete Code</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOUNDING VISION -->
+  <section class="inner-section founding-section" id="founding">
+    <div class="container founding-inner">
+      <span class="section-label reveal-up">From the Founder</span>
+      <h2 class="section-title reveal-up">FOUNDING <span class="text-red">VISION</span></h2>
+      <div class="founding-card reveal-up">
+        <div class="founding-quote-mark" aria-hidden="true">&ldquo;</div>
+        <p class="founding-body">
+          I started training BJJ in Belize because I fell in love with the problem-solving nature of grappling — the way every roll is a conversation in real time, a chess match fought with your body. But as I got deeper into the sport, I realized there was nowhere here to truly compete. Nowhere to test yourself on a real stage. Nowhere to prove that the work you were putting in meant something beyond the walls of your gym.
+        </p>
+        <p class="founding-body">
+          So I decided to build that place. Not just a tournament series — a platform. Something that takes the athletes of Belize and Central America seriously. Something that says: your dedication is worth compensating. Your submissions are worth celebrating. Your career in this sport is worth pursuing.
+        </p>
+        <p class="founding-body">
+          Finishers Circle is still young. We're building it event by event, athlete by athlete, submission by submission. But the vision is clear: we want to put Belize on the grappling map — not just in Central America, but in the world. The talent is here. The heart is here. Now the platform is here too.
+        </p>
+        <p class="founding-body">
+          <strong class="text-gold">Come find out if you belong in the Circle.</strong>
+        </p>
+        <cite class="founding-cite">&#8212; Founder, Finishers Circle</cite>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="container cta-inner reveal-up">
+      <span class="section-label">Join the Circle</span>
+      <h2 class="cta-title arena-trigger" data-view="entrance">READY TO <span class="text-gold">COMPETE?</span></h2>
+      <p class="cta-body">Registration is open. Limited spots. Submission only.<br>No points. No decisions. Just finishes.</p>
+      <a href="registration.html" class="btn-gold btn-xl magnetic">Register Now</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <img src="media/main-logo.png" alt="Finishers Circle" class="footer-logo">
+          <p class="footer-tagline">The Premier Submission Series in Belize.<br>The first platform that pays its athletes.</p>
+        </div>
+        <nav class="footer-links" aria-label="Footer navigation">
+          <h4 class="footer-heading">Quick Links</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About &amp; Mission</a></li>
+            <li><a href="index.html#tournaments">Tournaments</a></li>
+            <li><a href="gallery.html">Gallery</a></li>
+            <li><a href="registration.html">Register</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </nav>
+        <address class="footer-contact">
+          <h4 class="footer-heading">Get in Touch</h4>
+          <div class="contact-item">
+            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            <a href="mailto:xanderbennett14@gmail.com">xanderbennett14@gmail.com</a>
+          </div>
+          <div class="contact-item">
+            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.68A2 2 0 012 .18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+            <a href="tel:+16582183227">+1 (658) 218-3227</a>
+          </div>
+          <div class="contact-item">
+            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            <a href="https://instagram.com/finisherscircle" target="_blank" rel="noopener">@finisherscircle</a>
+          </div>
+        </address>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Finishers Circle. All rights reserved.</p>
+        <p>Belize City, Belize &middot; Submission-Only Tournament Series</p>
+      </div>
+    </div>
+  </footer>
+
+</div><!-- /.site-wrapper -->
+
+<script src="main.js"></script>
+</body>
+</html>
