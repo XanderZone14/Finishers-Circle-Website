@@ -469,19 +469,112 @@ address { font-style: normal; }
 
 /* ═══════════════════════════════════════════════════
    SECTION OVERLAYS
-   (arena canvas is behind — sections need semi-transparent
-   dark backgrounds so text is readable against it)
+   Lighter overlays let the arena canvas breathe through.
+   Glassmorphism backdrop-filter adds frosted depth on key sections.
 ═══════════════════════════════════════════════════ */
-.hero                   { background: rgba(0,0,0,0.55); backdrop-filter: none; }
-.stats-section          { background: rgba(8,8,8,0.85); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
-.one-rule-section       { background: rgba(0,0,0,0.80); }
-.about-preview-section  { background: rgba(0,0,0,0.60); backdrop-filter: blur(2px); }
-.tournaments-section    { background: rgba(8,8,8,0.88); }
-.fighter-quote-section  { background: rgba(0,0,0,0.72); }
-.cta-section            { background: rgba(0,0,0,0.70); }
-.gallery-preview-section { background: rgba(0,0,0,0.82); }
+.hero                   { background: rgba(0,0,0,0.48); backdrop-filter: none; }
+.stats-section          {
+  background: rgba(6,3,9,0.72);
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+  border-image: linear-gradient(90deg, transparent, rgba(204,0,0,0.35), rgba(202,138,4,0.25), rgba(204,0,0,0.35), transparent) 1;
+}
+.one-rule-section       { background: rgba(0,0,0,0.60); }
+.about-preview-section  { background: rgba(0,0,0,0.58); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); }
+.tournaments-section    { background: rgba(6,3,9,0.74); }
+.fighter-quote-section  { background: rgba(0,0,0,0.40); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+.cta-section            { background: rgba(0,0,0,0.44); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); }
+.gallery-preview-section { background: rgba(0,0,0,0.65); }
 .site-footer            { background: rgba(0,0,0,0.92); border-top: 1px solid var(--border); }
 .marquee-section        { background: var(--red); }
+
+/* Glowing section separators */
+.stats-section::before,
+.tournaments-section::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(204,0,0,0.4) 25%, rgba(202,138,4,0.3) 50%, rgba(204,0,0,0.4) 75%, transparent 100%);
+  pointer-events: none;
+}
+.stats-section { position: relative; }
+.tournaments-section { position: relative; }
+
+
+/* ═══════════════════════════════════════════════════
+   MAT SHOWCASE SECTION
+   Transparent window onto the arena canvas —
+   sits between Stats and One Rule so the arena is
+   always fully visible at least once while scrolling.
+═══════════════════════════════════════════════════ */
+.mat-showcase {
+  position: relative;
+  height: clamp(280px, 48vh, 520px);
+  background: transparent;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.mat-showcase::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, transparent 28%, transparent 72%, rgba(0,0,0,0.55) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+.mat-showcase-inner {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+.mat-showcase-eyebrow {
+  font-family: var(--font-body);
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: rgba(202,138,4,0.7);
+}
+.mat-showcase-title {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 8vw, 7rem);
+  line-height: 0.9;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.08);
+  -webkit-text-stroke: 1px rgba(255,255,255,0.18);
+  pointer-events: none;
+  user-select: none;
+}
+.mat-showcase-badges {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 4px;
+}
+.mat-badge {
+  padding: 5px 14px;
+  border: 1px solid rgba(202,138,4,0.35);
+  border-radius: 30px;
+  font-family: var(--font-body);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(202,138,4,0.75);
+  background: rgba(202,138,4,0.06);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
 
 
 /* ═══════════════════════════════════════════════════
