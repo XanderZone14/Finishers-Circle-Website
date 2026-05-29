@@ -7,10 +7,30 @@
   <meta name="description" content="Belize's premier submission-only tournament series. No points. No politics. Just finishes. Join the Finishers Circle." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Source+Sans+3:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- GSAP + ScrollTrigger -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+
+  <!-- ======================== PRELOADER ======================== -->
+  <div id="preloader" aria-hidden="true" role="status" aria-label="Loading">
+    <img src="media/main-logo.png" alt="Finishers Circle" class="pre-logo" />
+    <div class="pre-progress-track">
+      <div class="pre-bar" id="preBar"></div>
+    </div>
+    <div class="pre-count" id="preCount">0%</div>
+    <button class="pre-skip" id="preSkip" aria-label="Skip intro">SKIP INTRO</button>
+  </div>
+
+  <!-- CUSTOM CURSOR -->
+  <div id="cursor" aria-hidden="true"></div>
+  <div id="cursor-follower" aria-hidden="true"></div>
+
+  <!-- FILM GRAIN OVERLAY -->
+  <div class="noise-overlay" aria-hidden="true"></div>
 
   <!-- SCROLL PROGRESS -->
   <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
@@ -41,7 +61,7 @@
       </ul>
     </nav>
 
-    <button class="nav-register-btn" id="openRegisterModal">Register Now</button>
+    <button class="nav-register-btn magnetic" id="openRegisterModal">Register Now</button>
 
     <button class="hamburger" id="hamburger" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mobileMenu">
       <span></span>
@@ -70,21 +90,32 @@
 
   <!-- ======================== HERO ======================== -->
   <section class="hero" id="hero" aria-label="Hero section">
+    <canvas id="emberCanvas" aria-hidden="true"></canvas>
     <video autoplay muted loop playsinline class="hero-video" aria-hidden="true">
       <source src="media/background.mp4" type="video/mp4" />
     </video>
     <div class="hero-overlay" aria-hidden="true"></div>
-    <div class="hero-vignette" aria-hidden="true"></div>
 
     <div class="hero-content">
-      <div class="hero-inner">
-        <img src="media/main-logo.png" alt="Finishers Circle" class="hero-logo" data-animate="zoom-in" />
-        <p class="hero-sub" data-animate="fade-up" data-delay="150">The Ultimate Submission Series in Belize</p>
-        <p class="hero-desc" data-animate="fade-up" data-delay="250">No points. No politics. Just finishes. Where the toughest grapplers<br class="desktop-only"> in Central America prove their worth.</p>
-        <div class="hero-actions" data-animate="fade-up" data-delay="350">
-          <button class="btn-primary btn-lg" id="heroRegisterBtn">Register Now</button>
-          <a href="#tournaments" class="btn-ghost btn-lg">View Tournaments</a>
+      <img src="media/main-logo.png" alt="Finishers Circle" class="hero-logo" />
+
+      <div class="hero-manifesto" aria-label="No Points. No Politics. Just Finishes.">
+        <div class="manifesto-line">
+          <span class="m-word">NO</span>&nbsp;<span class="m-outline">POINTS.</span>
         </div>
+        <div class="manifesto-line">
+          <span class="m-word">NO</span>&nbsp;<span class="m-outline">POLITICS.</span>
+        </div>
+        <div class="manifesto-line">
+          <span class="m-word">JUST</span>&nbsp;<span class="m-red">FINISHES.</span>
+        </div>
+      </div>
+
+      <p class="hero-sub">The Ultimate Submission Series in Belize &mdash; Central America</p>
+
+      <div class="hero-ctas">
+        <button class="btn-gold magnetic" id="heroRegisterBtn">Register Now</button>
+        <a href="#tournaments" class="btn-ghost-line magnetic">View Events</a>
       </div>
     </div>
 
@@ -101,37 +132,45 @@
       </div>
     </div>
 
-    <a href="#stats" class="scroll-hint" aria-label="Scroll to content">
-      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="7 13 12 18 17 13"/><polyline points="7 6 12 11 17 6"/></svg>
+    <a href="#stats" class="scroll-cue" aria-label="Scroll to content">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="7 13 12 18 17 13"/><polyline points="7 6 12 11 17 6"/></svg>
     </a>
   </section>
+
+  <!-- ======================== MARQUEE STRIP ======================== -->
+  <div class="marquee-section" aria-hidden="true">
+    <div class="marquee-track">
+      <span class="marquee-content">SUBMISSION ONLY &nbsp;&middot;&nbsp; NO POINTS &nbsp;&middot;&nbsp; NO MERCY &nbsp;&middot;&nbsp; CENTRAL AMERICA &nbsp;&middot;&nbsp; BELIZE &nbsp;&middot;&nbsp; FINISHERS CIRCLE &nbsp;&middot;&nbsp; SUBMISSION ONLY &nbsp;&middot;&nbsp; NO POINTS &nbsp;&middot;&nbsp; NO MERCY &nbsp;&middot;&nbsp; CENTRAL AMERICA &nbsp;&middot;&nbsp; BELIZE &nbsp;&middot;&nbsp; FINISHERS CIRCLE &nbsp;&middot;&nbsp;</span>
+      <span class="marquee-content">SUBMISSION ONLY &nbsp;&middot;&nbsp; NO POINTS &nbsp;&middot;&nbsp; NO MERCY &nbsp;&middot;&nbsp; CENTRAL AMERICA &nbsp;&middot;&nbsp; BELIZE &nbsp;&middot;&nbsp; FINISHERS CIRCLE &nbsp;&middot;&nbsp; SUBMISSION ONLY &nbsp;&middot;&nbsp; NO POINTS &nbsp;&middot;&nbsp; NO MERCY &nbsp;&middot;&nbsp; CENTRAL AMERICA &nbsp;&middot;&nbsp; BELIZE &nbsp;&middot;&nbsp; FINISHERS CIRCLE &nbsp;&middot;&nbsp;</span>
+    </div>
+  </div>
 
   <!-- ======================== STATS ======================== -->
   <section class="stats-section" id="stats" aria-label="Key statistics">
     <div class="container">
       <div class="stats-grid">
-        <div class="stat-item" data-animate="fade-up" data-delay="0">
+        <div class="stat-item">
           <div class="stat-number-wrap">
             <span class="stat-number" data-target="500">0</span><span class="stat-suffix">+</span>
           </div>
           <span class="stat-label">Athletes Competed</span>
         </div>
         <div class="stat-divider" aria-hidden="true"></div>
-        <div class="stat-item" data-animate="fade-up" data-delay="100">
+        <div class="stat-item">
           <div class="stat-number-wrap">
             <span class="stat-number" data-target="8">0</span>
           </div>
           <span class="stat-label">Tournaments Held</span>
         </div>
         <div class="stat-divider" aria-hidden="true"></div>
-        <div class="stat-item" data-animate="fade-up" data-delay="200">
+        <div class="stat-item">
           <div class="stat-number-wrap">
             <span class="stat-number" data-target="12">0</span>
           </div>
           <span class="stat-label">Countries Represented</span>
         </div>
         <div class="stat-divider" aria-hidden="true"></div>
-        <div class="stat-item" data-animate="fade-up" data-delay="300">
+        <div class="stat-item">
           <div class="stat-number-wrap">
             <span class="stat-number" data-target="100">0</span><span class="stat-suffix">%</span>
           </div>
@@ -141,21 +180,28 @@
     </div>
   </section>
 
+  <!-- ======================== ONE RULE ======================== -->
+  <section class="one-rule-section" id="one-rule" aria-label="One rule section">
+    <div class="or-number" aria-hidden="true">01</div>
+    <div class="container or-inner">
+      <div class="or-label">ONE RULE:</div>
+      <div class="or-title">FINISH.</div>
+      <p class="or-body">No judges. No decisions. No controversy.<br>You win by submission &mdash; or you don't win at all.</p>
+    </div>
+  </section>
+
   <!-- ======================== ABOUT ======================== -->
   <section class="about-section" id="about" aria-label="About Finishers Circle">
-    <div class="about-bg-wrap" aria-hidden="true">
-      <div class="about-bg-img" style="background-image:url('media/about-hero.jpg')"></div>
-      <div class="about-overlay"></div>
-    </div>
-    <div class="container about-container">
-      <div class="about-content" data-animate="slide-left">
+    <div class="about-img-col" style="background-image:url('media/about-hero.jpg')" aria-hidden="true"></div>
+    <div class="about-text-col">
+      <div class="about-text-inner">
         <span class="section-label">Our Story</span>
-        <h2 class="section-title">Built for <span class="text-red">Warriors</span></h2>
+        <h2 class="section-title about-title">BUILT FOR<br><span class="text-red">WARRIORS</span></h2>
         <p class="about-body">
-          Finishers Circle is Belize's premier submission-only tournament series — created to showcase the true essence of Brazilian Jiu-Jitsu and combat sports. No points. No politics. Just pure competition.
+          Finishers Circle is Belize's premier submission-only tournament series &mdash; created to showcase the true essence of Brazilian Jiu-Jitsu and combat sports. No points. No politics. Just pure competition.
         </p>
         <p class="about-body">
-          Our mission is to bring together the toughest grapplers from across Central America and let skill speak louder than words. Every event, every mat, every second — earned through technique, heart, and the relentless pursuit of the finish.
+          Our mission is to bring together the toughest grapplers from across Central America and let skill speak louder than words. Every event, every mat, every second &mdash; earned through technique, heart, and the relentless pursuit of the finish.
         </p>
         <div class="about-pillars">
           <div class="pillar-item">
@@ -178,7 +224,7 @@
   <!-- ======================== TOURNAMENTS ======================== -->
   <section class="tournaments-section" id="tournaments" aria-label="Upcoming tournaments">
     <div class="container">
-      <header class="section-header" data-animate="fade-up">
+      <header class="section-header">
         <span class="section-label">On the Calendar</span>
         <h2 class="section-title">Upcoming <span class="text-red">Events</span></h2>
         <p class="section-desc">Secure your spot before divisions fill. All events are submission-only format.</p>
@@ -186,7 +232,7 @@
 
       <div class="tournaments-grid">
 
-        <article class="tournament-card featured" data-animate="fade-up" data-delay="0" aria-label="Submission Series Vol. 4">
+        <article class="tournament-card tilt-card featured" aria-label="Submission Series Vol. 4">
           <div class="card-badge badge-next">Next Event</div>
           <div class="card-top">
             <h3 class="card-title">Submission Series<br>Vol. 4</h3>
@@ -211,11 +257,11 @@
               <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
               12 spots left
             </span>
-            <button class="btn-primary btn-sm register-event-btn" data-event="Submission Series Vol. 4 — Aug 15, 2026">Register</button>
+            <button class="btn-gold btn-sm register-event-btn" data-event="Submission Series Vol. 4 — Aug 15, 2026">Register</button>
           </div>
         </article>
 
-        <article class="tournament-card" data-animate="fade-up" data-delay="120" aria-label="Finishers Circle Open">
+        <article class="tournament-card tilt-card" aria-label="Finishers Circle Open">
           <div class="card-badge badge-open">Registration Open</div>
           <div class="card-top">
             <h3 class="card-title">Finishers Circle<br>Open</h3>
@@ -240,11 +286,11 @@
               <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
               32 spots left
             </span>
-            <button class="btn-primary btn-sm register-event-btn" data-event="Finishers Circle Open — Oct 3, 2026">Register</button>
+            <button class="btn-gold btn-sm register-event-btn" data-event="Finishers Circle Open — Oct 3, 2026">Register</button>
           </div>
         </article>
 
-        <article class="tournament-card" data-animate="fade-up" data-delay="240" aria-label="Grand Championship 2026">
+        <article class="tournament-card tilt-card" aria-label="Grand Championship 2026">
           <div class="card-badge badge-soon">Coming Soon</div>
           <div class="card-top">
             <h3 class="card-title">Grand Championship<br>2026</h3>
@@ -266,7 +312,7 @@
           </div>
           <div class="card-footer">
             <span class="spots-label soon-text">Registration opens soon</span>
-            <button class="btn-outline btn-sm" disabled aria-disabled="true">Coming Soon</button>
+            <button class="btn-ghost-line btn-sm" disabled aria-disabled="true">Coming Soon</button>
           </div>
         </article>
 
@@ -274,18 +320,29 @@
     </div>
   </section>
 
+  <!-- ======================== FIGHTER QUOTE ======================== -->
+  <section class="fighter-quote-section" aria-label="Fighter quote">
+    <div class="quote-bg" style="background-image:url('media/gallery5.jpg')" aria-hidden="true"></div>
+    <div class="quote-overlay" aria-hidden="true"></div>
+    <div class="container quote-inner">
+      <div class="quote-mark" aria-hidden="true">&ldquo;</div>
+      <blockquote class="quote-text">
+        You want fame, glory, and to prove you're the best?<br>Shut up and make it to the Finishers Circle.
+      </blockquote>
+      <cite class="quote-author">&#8212; A Finishers Circle Champion</cite>
+    </div>
+  </section>
+
   <!-- ======================== REGISTER CTA ======================== -->
   <section class="cta-section" id="register" aria-label="Register for a tournament">
-    <div class="cta-bg" aria-hidden="true">
-      <div class="cta-bg-img" style="background-image:url('media/second-hero.jpg')"></div>
-      <div class="cta-overlay"></div>
-    </div>
+    <div class="cta-bg-img" style="background-image:url('media/second-hero.jpg')" aria-hidden="true"></div>
+    <div class="cta-overlay" aria-hidden="true"></div>
     <div class="container">
-      <div class="cta-inner" data-animate="fade-up">
+      <div class="cta-inner">
         <span class="section-label">Join the Circle</span>
-        <h2 class="cta-title">Ready to <span class="text-red">Prove</span> Yourself?</h2>
-        <p class="cta-body">Registration is open for multiple divisions. Limited spots. No points, no decisions — only finishes count.</p>
-        <button class="btn-primary btn-lg" id="ctaRegisterBtn">Register for a Tournament</button>
+        <h2 class="cta-title">READY TO PROVE<br><span class="text-gold">YOURSELF?</span></h2>
+        <p class="cta-body">Registration is open for multiple divisions. Limited spots.<br>No points, no decisions &mdash; only finishes count.</p>
+        <button class="btn-gold btn-xl magnetic" id="ctaRegisterBtn">Register for a Tournament</button>
       </div>
     </div>
   </section>
@@ -293,51 +350,43 @@
   <!-- ======================== GALLERY PREVIEW ======================== -->
   <section class="gallery-preview-section" id="gallery-preview" aria-label="Gallery preview">
     <div class="container">
-      <header class="section-header" data-animate="fade-up">
+      <header class="section-header">
         <span class="section-label">Action Shots</span>
         <h2 class="section-title">From the <span class="text-red">Mat</span></h2>
       </header>
-      <div class="preview-grid" data-animate="fade-up" data-delay="100">
-        <a href="gallery.html" class="preview-item preview-large" aria-label="View gallery">
+      <div class="preview-grid">
+        <a href="gallery.html" class="preview-item preview-large" aria-label="View gallery image 1">
           <img src="media/gallery1.jpg" alt="Tournament competition action" loading="lazy" />
-          <div class="preview-overlay" aria-hidden="true">
-            <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
-          </div>
+          <div class="preview-hover" aria-hidden="true"></div>
         </a>
-        <a href="gallery.html" class="preview-item" aria-label="View gallery">
-          <img src="media/gallery3.jpg" alt="Grappling match photo" loading="lazy" />
-          <div class="preview-overlay" aria-hidden="true">
-            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          </div>
+        <a href="gallery.html" class="preview-item" aria-label="View gallery image 2">
+          <img src="media/gallery3.jpg" alt="Grappling match" loading="lazy" />
+          <div class="preview-hover" aria-hidden="true"></div>
         </a>
-        <a href="gallery.html" class="preview-item" aria-label="View gallery">
-          <img src="media/gallery5.jpg" alt="Submission attempt photo" loading="lazy" />
-          <div class="preview-overlay" aria-hidden="true">
-            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          </div>
+        <a href="gallery.html" class="preview-item" aria-label="View gallery image 3">
+          <img src="media/gallery7.jpg" alt="Submission attempt" loading="lazy" />
+          <div class="preview-hover" aria-hidden="true"></div>
         </a>
       </div>
-      <div class="gallery-cta-wrap" data-animate="fade-up" data-delay="200">
-        <a href="gallery.html" class="btn-outline">View Full Gallery</a>
+      <div class="gallery-cta-wrap">
+        <a href="gallery.html" class="gallery-cta-link">VIEW THE FULL GALLERY &rarr;</a>
       </div>
     </div>
   </section>
 
   <!-- ======================== FOOTER / CONTACT ======================== -->
   <footer class="site-footer" id="contact" aria-label="Site footer and contact information">
-    <div class="footer-bg" aria-hidden="true">
-      <img src="media/contact-hero.jpg" alt="" class="footer-bg-img" />
-      <div class="footer-overlay"></div>
-    </div>
-    <div class="container">
+    <div class="footer-bg-img" style="background-image:url('media/contact-hero.jpg')" aria-hidden="true"></div>
+    <div class="footer-overlay" aria-hidden="true"></div>
+    <div class="container footer-content">
       <div class="footer-grid">
 
-        <div class="footer-brand" data-animate="fade-up">
+        <div class="footer-brand">
           <img src="media/main-logo.png" alt="Finishers Circle" class="footer-logo" />
           <p class="footer-tagline">The Premier Submission Series in Belize.<br>No points. No politics. Just finishes.</p>
         </div>
 
-        <nav class="footer-links" aria-label="Footer navigation" data-animate="fade-up" data-delay="100">
+        <nav class="footer-links" aria-label="Footer navigation">
           <h4 class="footer-heading">Quick Links</h4>
           <ul>
             <li><a href="#hero">Home</a></li>
@@ -348,7 +397,7 @@
           </ul>
         </nav>
 
-        <address class="footer-contact" data-animate="fade-up" data-delay="200">
+        <address class="footer-contact">
           <h4 class="footer-heading">Get in Touch</h4>
           <div class="contact-item">
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
@@ -388,12 +437,6 @@
           <p class="modal-subtitle">Secure your spot. Limited divisions available.</p>
         </div>
 
-        <!--
-          To activate real email submissions:
-          1. Go to https://formspree.io and create a free account
-          2. Create a new form and copy your form ID
-          3. Replace 'YOUR_FORM_ID' below with your actual Formspree form ID
-        -->
         <form class="register-form" id="registerForm" novalidate aria-label="Tournament registration form">
           <input type="hidden" name="_subject" value="New Registration — Finishers Circle" />
           <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" aria-hidden="true" />
@@ -492,7 +535,7 @@
             <span class="field-error" id="err-waiver" role="alert"></span>
           </div>
 
-          <button type="submit" class="btn-primary btn-lg submit-btn" id="submitBtn">
+          <button type="submit" class="btn-gold btn-lg submit-btn" id="submitBtn">
             <span class="btn-label">Submit Registration</span>
             <span class="btn-spinner" aria-hidden="true"></span>
           </button>
@@ -507,7 +550,7 @@
         <h3>Registration Submitted!</h3>
         <p>Thank you for registering. We'll be in touch shortly with confirmation details and payment instructions.</p>
         <div class="success-details" id="successDetails" aria-live="polite"></div>
-        <button class="btn-primary" id="successClose">Close</button>
+        <button class="btn-gold" id="successClose">Close</button>
       </div>
 
     </div>
