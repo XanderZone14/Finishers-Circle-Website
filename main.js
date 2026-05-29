@@ -236,54 +236,87 @@ function initGlobe() {
     renderer.setSize(W(), H());
   });
 
-  // Lighting: directional sun + ambient + rim
-  scene.add(new THREE.AmbientLight(0x223355, 1.2));
-  const sun = new THREE.DirectionalLight(0xfff8e8, 2.8);
+  // Lighting — sun + deep-space ambient + blue-rim for dark side
+  scene.add(new THREE.AmbientLight(0x0a1428, 2.5));
+  const sun = new THREE.DirectionalLight(0xfff4d6, 3.8);
   sun.position.set(5, 3, 5);
   scene.add(sun);
-  const rim = new THREE.DirectionalLight(0x2233aa, 0.6);
-  rim.position.set(-4, -1, -3);
+  const rim = new THREE.DirectionalLight(0x1a3a8a, 1.0);
+  rim.position.set(-6, -2, -4);
   scene.add(rim);
 
-  // Globe
-  const globe = new THREE.Mesh(
-    new THREE.SphereGeometry(1, 64, 64),
-    new THREE.MeshPhongMaterial({ map: makeEarthTexture(), specular: new THREE.Color(0x224466), shininess: 12 })
-  );
+  // Globe — start with canvas texture, upgrade to real NASA texture async
+  const globeMat = new THREE.MeshPhongMaterial({
+    map:       makeEarthTexture(),
+    specular:  new THREE.Color(0x336699),
+    shininess: 18,
+  });
+  const globe = new THREE.Mesh(new THREE.SphereGeometry(1, 64, 64), globeMat);
   scene.add(globe);
 
-  // Grid overlay
-  scene.add(new THREE.Mesh(
-    new THREE.SphereGeometry(1.003, 24, 14),
-    new THREE.MeshBasicMaterial({ color: 0x1a3a6a, wireframe: true, transparent: true, opacity: 0.05 })
-  ));
+  // Async-load real textures from CDN (three-globe package on jsDelivr)
+  const loader = new THREE.TextureLoader();
+  const CDN = 'https://cdn.jsdelivr.net/npm/three-globe/example/img/';
+  loader.crossOrigin = 'anonymous';
 
-  // Cloud sphere
-  const clouds = new THREE.Mesh(
-    new THREE.SphereGeometry(1.015, 48, 48),
-    new THREE.MeshPhongMaterial({ color: 0xffffff, transparent: true, opacity: 0.22, depthWrite: false })
-  );
+  loader.load(CDN + 'earth-blue-marble.jpg',
+    tex => { globeMat.map = tex; globeMat.needsUpdate = true; });
+
+  loader.load(CDN + 'earth-water.png',
+    tex => { globeMat.specularMap = tex; globeMat.specular = new THREE.Color(0x4488bb); globeMat.shininess = 28; globeMat.needsUpdate = true; });
+
+  // Cloud layer — real texture when loaded, white mesh in the meantime
+  const cloudMat = new THREE.MeshPhongMaterial({
+    transparent: true, opacity: 0.28, depthWrite: false,
+    color: 0xffffff,
+  });
+  const clouds = new THREE.Mesh(new THREE.SphereGeometry(1.016, 48, 48), cloudMat);
   scene.add(clouds);
 
-  // Atmosphere glow
-  const atmVert = `varying vec3 vNormal; void main(){ vNormal=normalize(normalMatrix*normal); gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0); }`;
-  const atmFrag = `varying vec3 vNormal; void main(){ float i=pow(0.65-dot(vNormal,vec3(0,0,1.0)),2.5); gl_FragColor=vec4(0.05,0.18,0.7,i*0.75); }`;
+  loader.load(CDN + 'earth-clouds.png',
+    tex => { cloudMat.map = tex; cloudMat.alphaMap = tex; cloudMat.color.set(0xffffff); cloudMat.opacity = 0.55; cloudMat.needsUpdate = true; });
+
+  // Dual-layer atmosphere — inner haze + outer scatter glow
+  const vN = `varying vec3 vN; void main(){ vN=normalize(normalMatrix*normal); gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.); }`;
+
+  // Inner: blue limb haze
   scene.add(new THREE.Mesh(
-    new THREE.SphereGeometry(1.18, 64, 64),
-    new THREE.ShaderMaterial({ vertexShader: atmVert, fragmentShader: atmFrag, side: THREE.FrontSide, blending: THREE.AdditiveBlending, transparent: true })
+    new THREE.SphereGeometry(1.04, 64, 64),
+    new THREE.ShaderMaterial({
+      vertexShader: vN,
+      fragmentShader: `varying vec3 vN; void main(){ float f=pow(0.7-dot(vN,vec3(0,0,1.)),3.5); gl_FragColor=vec4(0.15,0.45,1.0,f*0.6); }`,
+      side: THREE.FrontSide, blending: THREE.AdditiveBlending, transparent: true, depthWrite: false,
+    })
   ));
 
-  // Stars
-  const sv = [];
-  for (let i = 0; i < 2500; i++) {
-    const th = Math.random() * Math.PI * 2;
-    const ph = Math.acos(2 * Math.random() - 1);
-    const r  = 15 + Math.random() * 25;
-    sv.push(r * Math.sin(ph) * Math.cos(th), r * Math.sin(ph) * Math.sin(th), r * Math.cos(ph));
+  // Outer: deep blue-violet scatter
+  scene.add(new THREE.Mesh(
+    new THREE.SphereGeometry(1.22, 64, 64),
+    new THREE.ShaderMaterial({
+      vertexShader: vN,
+      fragmentShader: `varying vec3 vN; void main(){ float f=pow(0.55-dot(vN,vec3(0,0,1.)),4.2); gl_FragColor=vec4(0.05,0.15,0.75,f*0.45); }`,
+      side: THREE.FrontSide, blending: THREE.AdditiveBlending, transparent: true, depthWrite: false,
+    })
+  ));
+
+  // Rich star field — 3 size tiers, slight colour variation
+  const sPos = [], sCol = [];
+  for (let i = 0; i < 4000; i++) {
+    const th = Math.random() * Math.PI * 2, ph = Math.acos(2 * Math.random() - 1);
+    const r = 18 + Math.random() * 22;
+    sPos.push(r * Math.sin(ph) * Math.cos(th), r * Math.sin(ph) * Math.sin(th), r * Math.cos(ph));
+    // Warm/cool star tints
+    const t = Math.random();
+    sCol.push(t > 0.85 ? 1.0 : 0.92, t > 0.85 ? 0.85 : 0.94, t < 0.15 ? 1.0 : 0.96);
   }
   const sg = new THREE.BufferGeometry();
-  sg.setAttribute('position', new THREE.Float32BufferAttribute(sv, 3));
-  scene.add(new THREE.Points(sg, new THREE.PointsMaterial({ color: 0xffffff, size: 0.065, transparent: true, opacity: 0.75 })));
+  sg.setAttribute('position', new THREE.Float32BufferAttribute(sPos, 3));
+  sg.setAttribute('color',    new THREE.Float32BufferAttribute(sCol, 3));
+
+  // Large bright stars
+  scene.add(new THREE.Points(sg, new THREE.PointsMaterial({ size: 0.12, vertexColors: true, transparent: true, opacity: 0.9 })));
+  // Small dim stars (same geometry, half opacity)
+  scene.add(new THREE.Points(sg, new THREE.PointsMaterial({ size: 0.04, vertexColors: true, transparent: true, opacity: 0.45 })));
 
   // lat/lon → globe local position
   function ll2v(lat, lon, r = 1.012) {
