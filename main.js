@@ -13,7 +13,267 @@ const isMobile = () => window.innerWidth < 768;
 const RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 /* =========================================================
-   A. THREE.JS GLOBE INTRO
+   A. EARTH TEXTURE GENERATOR
+   ========================================================= */
+
+function makeEarthCanvasTexture() {
+  const TW = 2048, TH = 1024;
+  const cv = document.createElement('canvas');
+  cv.width = TW; cv.height = TH;
+  const g = cv.getContext('2d');
+
+  // Equirectangular projection: lat/lon → canvas pixel
+  const p = (lat, lon) => [(lon + 180) / 360 * TW, (90 - lat) / 180 * TH];
+
+  function fillPoly(coords, color) {
+    g.beginPath();
+    coords.forEach(([la, lo], i) => {
+      const [x, y] = p(la, lo);
+      i === 0 ? g.moveTo(x, y) : g.lineTo(x, y);
+    });
+    g.closePath();
+    g.fillStyle = color;
+    g.fill();
+  }
+
+  // Ocean base gradient
+  const ocean = g.createLinearGradient(0, 0, 0, TH);
+  ocean.addColorStop(0,    '#091826');
+  ocean.addColorStop(0.45, '#0e2244');
+  ocean.addColorStop(0.55, '#0e2244');
+  ocean.addColorStop(1,    '#091826');
+  g.fillStyle = ocean;
+  g.fillRect(0, 0, TW, TH);
+
+  // Subtle ocean grid
+  g.strokeStyle = 'rgba(15,40,80,0.2)';
+  g.lineWidth = 0.5;
+  for (let lat = -60; lat <= 60; lat += 30) {
+    const [, y] = p(lat, 0);
+    g.beginPath(); g.moveTo(0, y); g.lineTo(TW, y); g.stroke();
+  }
+  for (let lon = -150; lon <= 150; lon += 30) {
+    const [x] = p(0, lon);
+    g.beginPath(); g.moveTo(x, 0); g.lineTo(x, TH); g.stroke();
+  }
+
+  const T  = '#2e6b1a'; // tropical
+  const TM = '#3d7a22'; // temperate
+  const DY = '#8b7355'; // dry/savanna
+  const DS = '#c4a265'; // desert
+  const BR = '#4a7a35'; // boreal
+  const IC = '#dce8e4'; // ice
+
+  // === NORTH AMERICA ===
+  fillPoly([
+    [72,-157],[70,-142],[67,-141],[60,-136],[57,-133],[53,-130],
+    [50,-126],[49,-124],[47,-122],[42,-124],[36,-121],[33,-118],
+    [29,-115],[25,-110],[22,-106],[20,-103],[20,-99],[18,-95],
+    [16,-92],[15,-91],[15,-88],[16,-88],[18,-90],[20,-88],
+    [21,-87],[21,-85],[25,-77],[27,-82],[26,-81],[25,-80],
+    [30,-81],[35,-76],[40,-74],[42,-70],[44,-67],[47,-54],
+    [49,-63],[49,-95],[50,-97],[49,-122],[54,-131],[58,-136],
+    [60,-143],[63,-150],[65,-168],[68,-167],[70,-163],[72,-157]
+  ], TM);
+
+  // Mexico interior (drier)
+  fillPoly([
+    [30,-116],[28,-112],[25,-110],[22,-106],[20,-103],
+    [20,-99],[18,-95],[16,-92],[15,-91],[16,-89],
+    [18,-90],[21,-90],[24,-100],[26,-106],[28,-109],[30,-116]
+  ], DY);
+
+  // Central America (lush tropical)
+  fillPoly([
+    [22,-90],[21,-87],[21,-85],[18,-90],[16,-92],[16,-89],
+    [15,-89],[15,-88],[16,-88],[16,-83],[9,-79],[8,-77],
+    [8,-83],[10,-85],[13,-86],[14,-89],[16,-89],[18,-90],
+    [19,-91],[21,-90],[22,-90]
+  ], T);
+
+  // Belize — bright highlight so it's visible on zoom
+  fillPoly([
+    [18.5,-87.5],[18.5,-88.4],[17.8,-89.2],[16.8,-89.2],
+    [15.9,-89.0],[15.9,-88.3],[16.7,-88.1],[18.5,-87.5]
+  ], '#52bb1e');
+
+  // === GREENLAND ===
+  fillPoly([
+    [83,-60],[82,-35],[80,-18],[76,-18],[72,-24],[68,-24],
+    [65,-37],[62,-43],[60,-44],[62,-52],[65,-55],[62,-65],
+    [67,-70],[73,-73],[78,-74],[82,-72],[83,-60]
+  ], IC);
+
+  // === SOUTH AMERICA ===
+  fillPoly([
+    [12,-72],[10,-62],[11,-60],[8,-62],[5,-52],[4,-51],
+    [2,-50],[0,-50],[-4,-43],[-5,-35],[-8,-35],[-12,-37],
+    [-15,-39],[-20,-40],[-22,-43],[-28,-49],[-33,-52],
+    [-38,-58],[-42,-64],[-46,-66],[-50,-68],[-53,-70],
+    [-55,-66],[-55,-68],[-50,-75],[-45,-74],[-40,-73],
+    [-33,-72],[-22,-70],[-18,-70],[-15,-75],[-10,-78],
+    [-5,-81],[0,-80],[2,-78],[5,-77],[7,-77],[8,-74],[10,-72],[12,-72]
+  ], T);
+
+  // Amazon basin (deeper green)
+  fillPoly([
+    [5,-74],[5,-52],[0,-50],[-4,-43],[-5,-35],
+    [-8,-40],[-10,-55],[-8,-60],[-5,-65],[-5,-74],[0,-78],[5,-74]
+  ], '#1e5010');
+
+  // Patagonia/southern cone (drier)
+  fillPoly([
+    [-40,-73],[-33,-72],[-22,-70],[-38,-58],[-42,-64],[-46,-66],[-50,-68],[-40,-73]
+  ], DY);
+
+  // === EUROPE ===
+  fillPoly([
+    [71,28],[70,26],[68,16],[63,10],[58,5],[56,5],
+    [51,2],[51,-4],[48,-5],[44,-9],[37,-9],[36,-6],
+    [36,0],[37,13],[38,15],[41,16],[40,19],[41,21],
+    [42,22],[41,24],[41,27],[42,28],[45,30],[47,37],
+    [46,38],[42,36],[43,29],[46,38],[48,40],[52,40],
+    [55,38],[57,38],[60,32],[64,26],[68,20],[71,28]
+  ], TM);
+
+  // === AFRICA ===
+  fillPoly([
+    [37,-5],[37,12],[34,28],[30,33],[22,37],[14,44],
+    [12,44],[8,44],[2,42],[-2,41],[-5,40],[-10,40],
+    [-15,37],[-20,35],[-25,33],[-34,26],[-35,20],
+    [-30,17],[-25,15],[-20,14],[-14,12],[-5,10],
+    [-4,9],[-5,2],[-5,-8],[0,-8],[3,-9],[5,-10],
+    [5,-16],[8,-15],[14,-17],[20,-17],[26,-15],
+    [30,-10],[32,-3],[35,0],[37,-5]
+  ], DY);
+
+  // Sahara (desert overlay)
+  fillPoly([
+    [37,-5],[37,12],[30,33],[22,37],[22,30],[18,20],
+    [15,10],[12,2],[12,-17],[20,-17],[26,-15],
+    [30,-10],[32,-3],[35,0],[37,-5]
+  ], DS);
+
+  // Congo tropical belt
+  fillPoly([
+    [5,10],[5,28],[-5,28],[-5,10],[5,10]
+  ], T);
+
+  // === MIDDLE EAST (desert) ===
+  fillPoly([
+    [38,26],[38,40],[32,48],[24,57],[18,56],[15,44],
+    [12,44],[14,44],[22,37],[30,33],[34,28],[37,37],[38,26]
+  ], DS);
+
+  // === CENTRAL ASIA ===
+  fillPoly([
+    [38,44],[32,48],[26,57],[24,60],[24,68],[28,70],
+    [30,74],[34,74],[34,72],[36,70],[38,72],[40,68],
+    [42,64],[44,60],[42,50],[38,44]
+  ], DY);
+
+  // India / South Asia
+  fillPoly([
+    [24,68],[28,70],[30,74],[28,76],[22,88],[20,87],
+    [16,82],[10,80],[8,78],[8,77],[10,78],[13,80],
+    [18,84],[22,88],[28,78],[28,76],[32,76],[34,74],[28,70],[24,68]
+  ], DY);
+
+  // === RUSSIA / SIBERIA (two parts) ===
+  fillPoly([
+    [68,28],[65,28],[60,28],[55,35],[52,40],[55,38],
+    [57,40],[60,50],[62,58],[65,68],[68,68],[72,68],
+    [74,80],[74,100],[72,100],[68,90],[65,60],[62,48],
+    [58,40],[55,38],[52,36],[52,50],[48,56],[48,68],
+    [44,60],[42,50],[42,44],[46,38],[48,40],[52,40],
+    [55,38],[57,38],[60,32],[64,26],[68,20],[71,28],[68,28]
+  ], BR);
+
+  fillPoly([
+    [74,100],[74,130],[71,141],[65,141],[62,142],
+    [55,135],[52,141],[49,142],[46,136],[44,134],
+    [44,130],[46,124],[48,116],[52,100],[55,100],
+    [58,110],[62,120],[65,110],[68,100],[74,100]
+  ], BR);
+
+  fillPoly([
+    [71,141],[74,160],[77,162],[77,140],[71,141]
+  ], BR);
+
+  // === CHINA / EAST ASIA ===
+  fillPoly([
+    [52,100],[52,116],[48,116],[46,124],[44,130],
+    [44,134],[40,130],[38,128],[35,128],[30,122],
+    [25,122],[22,121],[20,110],[18,110],[14,102],
+    [14,106],[12,104],[10,100],[14,100],[18,96],
+    [22,94],[24,90],[28,98],[28,88],[32,80],[36,72],
+    [40,68],[42,64],[44,60],[48,68],[48,56],[52,60],
+    [55,80],[52,80],[52,100]
+  ], TM);
+
+  // Japan
+  fillPoly([
+    [43,145],[42,142],[40,140],[36,137],[34,133],
+    [33,130],[34,131],[36,136],[38,141],[40,142],[43,145]
+  ], TM);
+
+  // Southeast Asia mainland
+  fillPoly([
+    [22,100],[22,94],[18,96],[14,100],[10,100],
+    [10,104],[3,103],[1,103],[3,100],[7,100],[14,100],[18,100],[22,100]
+  ], T);
+
+  // Sumatra / Java
+  fillPoly([
+    [5,98],[5,100],[3,103],[1,103],[1,104],[-1,105],
+    [-6,107],[-7,108],[-7,112],[-6,107],[-2,106],[1,104],[5,98]
+  ], T);
+
+  fillPoly([
+    [-8,115],[-8,122],[-5,118],[-3,115],[-6,112],[-8,115]
+  ], T);
+
+  // === AUSTRALIA ===
+  fillPoly([
+    [-17,122],[-14,128],[-12,136],[-14,136],[-14,141],
+    [-17,141],[-20,148],[-24,151],[-28,153],[-34,151],
+    [-38,145],[-38,140],[-36,138],[-34,137],[-32,133],
+    [-30,130],[-28,126],[-24,114],[-22,114],[-20,115],[-17,122]
+  ], DS);
+
+  // Northern tropical coast
+  fillPoly([
+    [-14,128],[-12,136],[-14,136],[-14,141],[-17,141],[-17,122],[-14,128]
+  ], T);
+
+  // === NEW ZEALAND ===
+  fillPoly([
+    [-34,172],[-36,174],[-40,176],[-44,170],[-46,168],
+    [-44,171],[-40,174],[-36,174],[-34,172]
+  ], TM);
+
+  // === ANTARCTICA ===
+  g.fillStyle = IC;
+  g.fillRect(0, Math.round(TH * 0.795), TW, Math.round(TH * 0.205));
+  fillPoly([
+    [-65,-180],[-68,-150],[-72,-100],[-75,-50],[-78,0],
+    [-78,50],[-75,100],[-70,150],[-65,180],[-62,180],[-62,-180],[-65,-180]
+  ], IC);
+
+  // North polar cap
+  g.fillStyle = IC;
+  g.fillRect(0, 0, TW, Math.round(TH * 0.038));
+  const northIce = g.createLinearGradient(0, Math.round(TH * 0.038), 0, Math.round(TH * 0.1));
+  northIce.addColorStop(0, 'rgba(220,232,228,0.85)');
+  northIce.addColorStop(1, 'rgba(220,232,228,0)');
+  g.fillStyle = northIce;
+  g.fillRect(0, Math.round(TH * 0.038), TW, Math.round(TH * 0.062));
+
+  return new THREE.CanvasTexture(cv);
+}
+
+/* =========================================================
+   B. THREE.JS GLOBE INTRO
    ========================================================= */
 
 function completeGlobeIntro() {
@@ -51,31 +311,43 @@ function initGlobe() {
     renderer.setSize(W(), H());
   });
 
-  // Lighting
-  scene.add(new THREE.AmbientLight(0x111133, 2));
-  const keyLight = new THREE.PointLight(0x2244ff, 4, 20);
-  keyLight.position.set(5, 3, 5);
-  scene.add(keyLight);
-  const fillLight = new THREE.PointLight(0xcc0000, 2, 15);
-  fillLight.position.set(-4, -2, 3);
-  scene.add(fillLight);
+  // Lighting — sun directional + soft ambient
+  scene.add(new THREE.AmbientLight(0x223355, 1.2));
+  const sunLight = new THREE.DirectionalLight(0xfff8e8, 2.8);
+  sunLight.position.set(5, 3, 5);
+  scene.add(sunLight);
+  const rimLight = new THREE.DirectionalLight(0x2233aa, 0.6);
+  rimLight.position.set(-4, -1, -3);
+  scene.add(rimLight);
 
-  // Globe sphere
+  // Globe sphere with Earth texture
   const globeGeo = new THREE.SphereGeometry(1, 64, 64);
   const globeMat = new THREE.MeshPhongMaterial({
-    color: 0x020d1f, emissive: 0x000820, specular: 0x223366, shininess: 20
+    map:       makeEarthCanvasTexture(),
+    specular:  new THREE.Color(0x224466),
+    shininess: 12,
   });
   const globe = new THREE.Mesh(globeGeo, globeMat);
   scene.add(globe);
 
-  // Lat/lon grid overlay
+  // Subtle lat/lon grid overlay
   const gridGeo = new THREE.SphereGeometry(1.003, 24, 14);
-  const gridMat = new THREE.MeshBasicMaterial({ color: 0x1a3a6a, wireframe: true, transparent: true, opacity: 0.13 });
+  const gridMat = new THREE.MeshBasicMaterial({
+    color: 0x1a3a6a, wireframe: true, transparent: true, opacity: 0.06
+  });
   scene.add(new THREE.Mesh(gridGeo, gridMat));
+
+  // Cloud sphere
+  const cloudGeo = new THREE.SphereGeometry(1.015, 48, 48);
+  const cloudMat = new THREE.MeshPhongMaterial({
+    color: 0xffffff, transparent: true, opacity: 0.22, depthWrite: false,
+  });
+  const clouds = new THREE.Mesh(cloudGeo, cloudMat);
+  scene.add(clouds);
 
   // Atmosphere shader
   const atmVert = `varying vec3 vNormal; void main(){ vNormal=normalize(normalMatrix*normal); gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0); }`;
-  const atmFrag = `varying vec3 vNormal; void main(){ float i=pow(0.65-dot(vNormal,vec3(0,0,1.0)),2.5); gl_FragColor=vec4(0.05,0.15,0.6,i*0.8); }`;
+  const atmFrag = `varying vec3 vNormal; void main(){ float i=pow(0.65-dot(vNormal,vec3(0,0,1.0)),2.5); gl_FragColor=vec4(0.05,0.18,0.7,i*0.75); }`;
   const atmGeo  = new THREE.SphereGeometry(1.18, 64, 64);
   const atmMat  = new THREE.ShaderMaterial({
     vertexShader: atmVert, fragmentShader: atmFrag,
@@ -93,7 +365,9 @@ function initGlobe() {
   }
   const starGeo = new THREE.BufferGeometry();
   starGeo.setAttribute('position', new THREE.Float32BufferAttribute(starVerts, 3));
-  scene.add(new THREE.Points(starGeo, new THREE.PointsMaterial({ color: 0xffffff, size: 0.065, transparent: true, opacity: 0.75 })));
+  scene.add(new THREE.Points(starGeo, new THREE.PointsMaterial({
+    color: 0xffffff, size: 0.065, transparent: true, opacity: 0.75
+  })));
 
   // Helper: lat/lon → Vec3 on globe surface
   function ll2v(lat, lon, r = 1.012) {
@@ -111,9 +385,9 @@ function initGlobe() {
     const verts = pts.flatMap(([la, lo]) => { const v = ll2v(la, lo, 1.006); return [v.x, v.y, v.z]; });
     const first = ll2v(pts[0][0], pts[0][1], 1.006);
     verts.push(first.x, first.y, first.z);
-    const g = new THREE.BufferGeometry();
-    g.setAttribute('position', new THREE.Float32BufferAttribute(verts, 3));
-    return new THREE.Line(g, new THREE.LineBasicMaterial({ color, transparent: true, opacity }));
+    const geom = new THREE.BufferGeometry();
+    geom.setAttribute('position', new THREE.Float32BufferAttribute(verts, 3));
+    return new THREE.Line(geom, new THREE.LineBasicMaterial({ color, transparent: true, opacity }));
   }
 
   // Belize outline
@@ -126,14 +400,14 @@ function initGlobe() {
   // Central America outline
   const caLine = makeLine([
     [23, -90], [23, -84], [8, -77], [8, -83], [12, -87], [16, -92], [23, -90]
-  ], 0x2244aa, 0.2);
+  ], 0x2244aa, 0.15);
   globe.add(caLine);
 
   // Belize dot
   const belizeLocalPos = ll2v(17.25, -88.76, 1.02);
   const belizeDot = new THREE.Mesh(
     new THREE.SphereGeometry(0.018, 8, 8),
-    new THREE.MeshBasicMaterial({ color: 0xcc0000, transparent: true, opacity: 0 })
+    new THREE.MeshBasicMaterial({ color: 0xff2222, transparent: true, opacity: 0 })
   );
   belizeDot.position.copy(belizeLocalPos);
   globe.add(belizeDot);
@@ -141,15 +415,18 @@ function initGlobe() {
   // Pulse ring
   const ringMesh = new THREE.Mesh(
     new THREE.RingGeometry(0.025, 0.045, 32),
-    new THREE.MeshBasicMaterial({ color: 0xcc0000, transparent: true, opacity: 0, side: THREE.DoubleSide })
+    new THREE.MeshBasicMaterial({ color: 0xff2222, transparent: true, opacity: 0, side: THREE.DoubleSide })
   );
   ringMesh.position.copy(belizeLocalPos);
   ringMesh.lookAt(new THREE.Vector3(0, 0, 0));
   ringMesh.rotateY(Math.PI);
   globe.add(ringMesh);
 
-  const targetRotY = (88.76 + 90) * (Math.PI / 180);
-  const targetRotX = -17.25 * (Math.PI / 180);
+  // targetRotY is computed dynamically on first scroll so we always find
+  // the nearest rotation that puts Belize (lon≈-88.76 → faces +Z at rotation.y=0)
+  // facing the camera, regardless of how long auto-rotation has been running.
+  let targetRotY    = null;
+  const targetRotX  = -17.25 * (Math.PI / 180);
 
   // DOM refs
   const globeIntro  = el('globeIntro');
@@ -158,9 +435,9 @@ function initGlobe() {
   const logoReveal  = el('globeLogoReveal');
   const scrollHint  = el('globeScrollHint');
 
-  let autoRotate   = true;
+  let autoRotate    = true;
   let introComplete = false;
-  let ringOpacity  = 0;
+  let ringOpacity   = 0;
 
   function completeIntro() {
     if (introComplete) return;
@@ -196,7 +473,17 @@ function initGlobe() {
     setTimeout(completeIntro, RM ? 0 : 500);
   }
 
+  // Safety fallback: ensure site appears even if ScrollTrigger never fires
+  setTimeout(() => { if (!introComplete) completeIntro(); }, 8000);
+
   function updateIntro(p) {
+    // Lazily set targetRotY to nearest alignment of Belize with the camera.
+    // Belize faces +Z (camera) when globe.rotation.y is any integer multiple of 2π.
+    if (targetRotY === null) {
+      const turns = Math.round(globe.rotation.y / (2 * Math.PI));
+      targetRotY = turns * 2 * Math.PI;
+    }
+
     if (p < 0.25) {
       autoRotate = p < 0.04;
       const t = p / 0.25;
@@ -237,6 +524,7 @@ function initGlobe() {
     requestAnimationFrame(tick);
     time += 0.005;
     if (autoRotate) globe.rotation.y += 0.0015;
+    clouds.rotation.y += 0.0007;
     if (ringOpacity > 0) {
       const pulse = (Math.sin(time * 3) * 0.5 + 0.5) * ringOpacity;
       ringMesh.material.opacity = 0.3 * pulse + 0.2 * ringOpacity;
@@ -247,7 +535,7 @@ function initGlobe() {
 }
 
 /* =========================================================
-   B. ARENA CANVAS BACKGROUND
+   C. ARENA CANVAS BACKGROUND
    ========================================================= */
 
 class ArenaRenderer {
@@ -498,7 +786,7 @@ class ArenaRenderer {
 }
 
 /* =========================================================
-   C. ARENA INIT
+   D. ARENA INIT
    ========================================================= */
 
 let arenaInstance = null;
@@ -521,7 +809,7 @@ function initArena() {
 }
 
 /* =========================================================
-   D. SITE ANIMATIONS (called after globe completes)
+   E. SITE ANIMATIONS (called after globe completes)
    ========================================================= */
 
 let siteAnimsInitialized = false;
@@ -530,7 +818,6 @@ function initSiteAnimations() {
   if (siteAnimsInitialized) return;
   siteAnimsInitialized = true;
 
-  // Register GSAP plugins
   if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
     gsap.registerPlugin(ScrollTrigger);
   }
@@ -559,7 +846,6 @@ function initNavScroll() {
   }
   window.addEventListener('scroll', update, { passive: true });
 
-  // Scroll progress bar
   const bar = el('scrollProgress');
   if (bar) {
     window.addEventListener('scroll', () => {
@@ -767,7 +1053,6 @@ function initScrollProgress() {
 /* ── GSAP scroll reveals ── */
 function initSectionReveals() {
   if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined' || RM) {
-    // If reduced motion, just make everything visible
     qsa('[data-reveal]').forEach(revealEl => {
       revealEl.style.opacity = '1';
       revealEl.style.transform = 'none';
@@ -837,7 +1122,7 @@ function initSectionReveals() {
   // Footer
   revealAll('.footer-grid', { trigger: '.footer-grid', start: 'top 85%' });
 
-  // Generic reveal for inner page sections
+  // Generic inner-page reveals
   revealAll('.reveal-up',    { stagger: 0.1 });
   revealAll('.reveal-stagger .reveal-item', { stagger: 0.15 });
 }
@@ -983,22 +1268,19 @@ function initFormPage() {
 }
 
 /* =========================================================
-   E. INIT ON DOMCONTENTLOADED
+   F. INIT ON DOMCONTENTLOADED
    ========================================================= */
 
 document.addEventListener('DOMContentLoaded', () => {
   const globeIntro = el('globeIntro');
 
   if (globeIntro) {
-    // Index page: run globe intro
     if (RM) {
-      // Skip globe entirely for reduced motion users
       globeIntro.style.display = 'none';
       const sw = el('siteWrapper');
       if (sw) sw.classList.add('visible');
       initSiteAnimations();
     } else {
-      // Wait for Three.js and GSAP to be available (they're deferred)
       function tryInitGlobe() {
         if (typeof THREE !== 'undefined' && typeof gsap !== 'undefined') {
           initGlobe();
@@ -1009,7 +1291,6 @@ document.addEventListener('DOMContentLoaded', () => {
       tryInitGlobe();
     }
   } else {
-    // Other pages: skip globe, go straight to site animations
     const sw = el('siteWrapper');
     if (sw) sw.classList.add('visible');
 
