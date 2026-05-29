@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register | Finishers Circle</title>
+  <meta name="description" content="Register for a Finishers Circle tournament. Submission-only format. Divisions fill fast — secure your spot now." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Source+Sans+3:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- ARENA CANVAS -->
+<canvas id="arenaCanvas" class="arena-bg" aria-hidden="true"></canvas>
+
+<!-- SITE WRAPPER -->
+<div id="siteWrapper" class="site-wrapper">
+
+  <!-- FILM GRAIN -->
+  <div class="noise-overlay" aria-hidden="true"></div>
+
+  <!-- SCROLL PROGRESS -->
+  <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+
+  <!-- CUSTOM CURSOR -->
+  <div id="cursor" aria-hidden="true"></div>
+  <div id="cursor-follower" aria-hidden="true"></div>
+
+  <!-- HEADER -->
+  <header class="main-header" id="mainHeader">
+    <a href="index.html" class="nav-brand">
+      <img src="media/mini-logo.png" alt="Finishers Circle" class="nav-logo">
+    </a>
+    <nav class="navbar" id="mainNav" aria-label="Main navigation">
+      <ul class="nav-list">
+        <li><a href="index.html" class="nav-link arena-trigger" data-view="center">Home</a></li>
+        <li><a href="about.html" class="nav-link arena-trigger" data-view="sideline">About</a></li>
+        <li><a href="index.html#tournaments" class="nav-link arena-trigger" data-view="corner">Tournaments</a></li>
+        <li><a href="gallery.html" class="nav-link arena-trigger" data-view="elevated">Gallery</a></li>
+        <li><a href="registration.html" class="nav-link active arena-trigger" data-view="entrance">Register</a></li>
+        <li><a href="contact.html" class="nav-link arena-trigger" data-view="sideline">Contact</a></li>
+      </ul>
+    </nav>
+    <a href="registration.html" class="nav-register-btn">Register Now</a>
+    <button class="hamburger" id="hamburger" aria-label="Open navigation" aria-expanded="false" aria-controls="mobileMenu">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true" role="dialog">
+    <button class="mobile-close" id="mobileClose" aria-label="Close navigation">
+      <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <nav>
+      <ul class="mobile-nav-list">
+        <li><a href="index.html" class="mobile-nav-link">Home</a></li>
+        <li><a href="about.html" class="mobile-nav-link">About</a></li>
+        <li><a href="index.html#tournaments" class="mobile-nav-link">Tournaments</a></li>
+        <li><a href="gallery.html" class="mobile-nav-link">Gallery</a></li>
+        <li><a href="registration.html" class="mobile-nav-link">Register</a></li>
+        <li><a href="contact.html" class="mobile-nav-link">Contact</a></li>
+      </ul>
+    </nav>
+    <a href="registration.html" class="mobile-register-btn">Register Now</a>
+  </div>
+  <div class="mobile-backdrop" id="mobileBackdrop" aria-hidden="true"></div>
+
+  <!-- PAGE HERO -->
+  <section class="page-hero" aria-label="Registration hero">
+    <div class="page-hero-inner container">
+      <span class="section-label">Secure Your Spot</span>
+      <h1 class="page-hero-title">REGISTER <span class="text-red">NOW</span></h1>
+      <p class="page-hero-sub">Divisions Fill Fast &mdash; Don't Miss Your Chance</p>
+    </div>
+  </section>
+
+  <!-- COUNTDOWN -->
+  <section class="reg-countdown-section">
+    <div class="container">
+      <div class="reg-countdown-wrap reveal-up">
+        <p class="countdown-label">Next Event: <strong>Submission Series Vol. 4 &mdash; June 20, 2026</strong></p>
+        <div class="countdown-timer" role="timer" aria-label="Countdown to next event">
+          <div class="cd-unit"><span id="cdDays">00</span><small>Days</small></div>
+          <span class="cd-sep">:</span>
+          <div class="cd-unit"><span id="cdHours">00</span><small>Hours</small></div>
+          <span class="cd-sep">:</span>
+          <div class="cd-unit"><span id="cdMins">00</span><small>Mins</small></div>
+          <span class="cd-sep">:</span>
+          <div class="cd-unit"><span id="cdSecs">00</span><small>Secs</small></div>
+        </div>
+        <p class="countdown-venue">Belmopan, Belize &middot; Submission-Only Format &middot; All Belts Welcome</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- REGISTRATION FORM SECTION -->
+  <section class="reg-form-section" id="formSection">
+    <div class="container">
+      <div class="reg-layout">
+
+        <!-- FORM CARD -->
+        <div class="reg-form-card reveal-up">
+          <div class="reg-form-header">
+            <span class="section-label">Competitor Information</span>
+            <h2 class="reg-form-title">ENTER THE <span class="text-red">CIRCLE</span></h2>
+            <p class="reg-form-sub">Complete all fields below. One submission per competitor. You will receive a confirmation by email.</p>
+          </div>
+
+          <form id="registerForm" novalidate>
+            <!-- Name Row -->
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="r-firstName">First Name <span class="req" aria-hidden="true">*</span></label>
+                <input class="form-input" type="text" id="r-firstName" name="firstName" autocomplete="given-name" required placeholder="Alexander" />
+                <span class="field-error" id="err-r-firstName" role="alert"></span>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="r-lastName">Last Name <span class="req" aria-hidden="true">*</span></label>
+                <input class="form-input" type="text" id="r-lastName" name="lastName" autocomplete="family-name" required placeholder="Bennett" />
+                <span class="field-error" id="err-r-lastName" role="alert"></span>
+              </div>
+            </div>
+
+            <!-- Contact Row -->
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="r-email">Email Address <span class="req" aria-hidden="true">*</span></label>
+                <input class="form-input" type="email" id="r-email" name="email" autocomplete="email" required placeholder="you@example.com" />
+                <span class="field-error" id="err-r-email" role="alert"></span>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="r-phone">Phone Number <span class="req" aria-hidden="true">*</span></label>
+                <input class="form-input" type="tel" id="r-phone" name="phone" autocomplete="tel" required placeholder="+1 (658) 218-3227" />
+                <span class="field-error" id="err-r-phone" role="alert"></span>
+              </div>
+            </div>
+
+            <!-- Tournament -->
+            <div class="form-group">
+              <label class="form-label" for="r-tournament">Select Tournament <span class="req" aria-hidden="true">*</span></label>
+              <select class="form-input form-select" id="r-tournament" name="tournament" required>
+                <option value="" disabled selected>Choose a tournament&hellip;</option>
+                <option value="Submission Series Vol. 4 — June 20, 2026">Submission Series Vol. 4 — June 20, 2026 (Belmopan)</option>
+                <option value="Finishers Circle Open — October 3, 2026">Finishers Circle Open — October 3, 2026 (Belize City)</option>
+              </select>
+              <span class="field-error" id="err-r-tournament" role="alert"></span>
+            </div>
+
+            <!-- Belt + Weight Row -->
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="r-belt">Belt Rank <span class="req" aria-hidden="true">*</span></label>
+                <select class="form-input form-select" id="r-belt" name="beltRank" required>
+                  <option value="" disabled selected>Select belt&hellip;</option>
+                  <option value="White Belt">White Belt</option>
+                  <option value="Blue Belt">Blue Belt</option>
+                  <option value="Purple Belt">Purple Belt</option>
+                  <option value="Brown Belt">Brown Belt</option>
+                  <option value="Black Belt">Black Belt</option>
+                  <option value="No-Gi Beginner">No-Gi Beginner (0&ndash;1 year)</option>
+                  <option value="No-Gi Intermediate">No-Gi Intermediate (1&ndash;3 years)</option>
+                  <option value="No-Gi Advanced">No-Gi Advanced (3+ years)</option>
+                </select>
+                <span class="field-error" id="err-r-belt" role="alert"></span>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="r-weight">Weight Division <span class="req" aria-hidden="true">*</span></label>
+                <select class="form-input form-select" id="r-weight" name="weightDivision" required>
+                  <option value="" disabled selected>Select division&hellip;</option>
+                  <option value="Rooster (under 57kg)">Rooster — under 57 kg (126 lb)</option>
+                  <option value="Light Feather (57–64kg)">Light Feather — 57–64 kg (126–141 lb)</option>
+                  <option value="Feather (64–70kg)">Feather — 64–70 kg (141–154 lb)</option>
+                  <option value="Light (70–76kg)">Light — 70–76 kg (154–168 lb)</option>
+                  <option value="Middle (76–82kg)">Middle — 76–82 kg (168–181 lb)</option>
+                  <option value="Medium Heavy (82–88kg)">Medium Heavy — 82–88 kg (181–194 lb)</option>
+                  <option value="Heavy (88–94kg)">Heavy — 88–94 kg (194–207 lb)</option>
+                  <option value="Super Heavy (94–100kg)">Super Heavy — 94–100 kg (207–220 lb)</option>
+                  <option value="Ultra Heavy (over 100kg)">Ultra Heavy — over 100 kg (220+ lb)</option>
+                  <option value="Open Weight">Open Weight</option>
+                </select>
+                <span class="field-error" id="err-r-weight" role="alert"></span>
+              </div>
+            </div>
+
+            <!-- Team -->
+            <div class="form-group">
+              <label class="form-label" for="r-team">Team / Gym <span class="optional">(optional)</span></label>
+              <input class="form-input" type="text" id="r-team" name="team" placeholder="Your gym or team name" />
+            </div>
+
+            <!-- Waiver -->
+            <div class="form-group">
+              <label class="check-label" for="r-waiver">
+                <input type="checkbox" id="r-waiver" name="waiver" />
+                <span class="check-custom" aria-hidden="true"></span>
+                <span class="check-text">
+                  I have read and agree to the <strong>Finishers Circle Liability Waiver</strong>. I understand that grappling sports carry inherent risk of injury and I compete at my own risk. I am at least 18 years of age or have guardian consent.
+                  <span class="req" aria-hidden="true">*</span>
+                </span>
+              </label>
+              <span class="field-error" id="err-r-waiver" role="alert"></span>
+            </div>
+
+            <!-- Submit -->
+            <button type="submit" id="submitBtn" class="btn-gold btn-lg btn-full magnetic">
+              <span class="btn-label">Secure My Spot</span>
+              <span class="btn-spinner" aria-hidden="true"></span>
+            </button>
+          </form>
+        </div>
+
+        <!-- INFO SIDEBAR -->
+        <aside class="reg-info-sidebar">
+          <div class="info-card reveal-up">
+            <h3 class="info-card-title">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 3l14 9-14 9V3z"/></svg>
+              What to Bring
+            </h3>
+            <ul class="info-list">
+              <li>Government-issued photo ID</li>
+              <li>Rashguard (no-gi required)</li>
+              <li>Shorts or spats (no pockets, no zippers)</li>
+              <li>Mouthguard (strongly recommended)</li>
+              <li>Water and snacks for a full-day event</li>
+              <li>Your competitive mindset</li>
+            </ul>
+          </div>
+
+          <div class="info-card reveal-up">
+            <h3 class="info-card-title">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              Rules &amp; Format
+            </h3>
+            <ul class="info-list">
+              <li><strong>Submission only</strong> — no points, no decisions</li>
+              <li>Overtime if no finish: sudden death sub-only overtime</li>
+              <li>Standard time limits vary by division and belt</li>
+              <li>All legal submissions per IBJJF rules by default</li>
+              <li>Heel hooks allowed for Advanced/No-Gi divisions</li>
+              <li>All brackets single or double elimination</li>
+            </ul>
+          </div>
+
+          <div class="info-card reveal-up">
+            <h3 class="info-card-title">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              Questions?
+            </h3>
+            <p class="info-body">Reach us at any time. We respond within 24 hours.</p>
+            <a href="mailto:xanderbennett14@gmail.com" class="info-contact-link">xanderbennett14@gmail.com</a>
+            <a href="tel:+16582183227" class="info-contact-link">+1 (658) 218-3227</a>
+            <a href="contact.html" class="btn-ghost-line btn-sm" style="margin-top:12px;display:inline-flex;">Full Contact Page &rarr;</a>
+          </div>
+        </aside>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- SUCCESS STATE -->
+  <section id="modalSuccessView" class="reg-success-section" hidden>
+    <div class="container">
+      <div class="success-card reveal-up">
+        <div class="success-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="56" height="56" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+            <polyline points="22 4 12 14.01 9 11.01"/>
+          </svg>
+        </div>
+        <h2 class="success-title">YOU'RE IN THE <span class="text-red">CIRCLE</span></h2>
+        <p class="success-body">Your registration has been received. We'll send confirmation details to your email. Prepare yourself.</p>
+        <div class="success-details-wrap">
+          <p class="success-details-label">Registration Summary</p>
+          <div id="successDetails" class="success-details"></div>
+        </div>
+        <div class="success-actions">
+          <a href="index.html" class="btn-gold btn-lg">Return Home</a>
+          <a href="contact.html" class="btn-ghost-line btn-lg">Contact Us</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <img src="media/main-logo.png" alt="Finishers Circle" class="footer-logo">
+          <p class="footer-tagline">The Premier Submission Series in Belize.<br>The first platform that pays its athletes.</p>
+        </div>
+        <nav class="footer-links" aria-label="Footer navigation">
+          <h4 class="footer-heading">Quick Links</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About &amp; Mission</a></li>
+            <li><a href="index.html#tournaments">Tournaments</a></li>
+            <li><a href="gallery.html">Gallery</a></li>
+            <li><a href="registration.html">Register</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </nav>
+        <address class="footer-contact">
+          <h4 class="footer-heading">Get in Touch</h4>
+          <div class="contact-item">
+            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            <a href="mailto:xanderbennett14@gmail.com">xanderbennett14@gmail.com</a>
+          </div>
+          <div class="contact-item">
+            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.68A2 2 0 012 .18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+            <a href="tel:+16582183227">+1 (658) 218-3227</a>
+          </div>
+          <div class="contact-item">
+            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            <a href="https://instagram.com/finisherscircle" target="_blank" rel="noopener">@finisherscircle</a>
+          </div>
+        </address>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Finishers Circle. All rights reserved.</p>
+        <p>Belize City, Belize &middot; Submission-Only Tournament Series</p>
+      </div>
+    </div>
+  </footer>
+
+</div><!-- /.site-wrapper -->
+
+<script src="main.js"></script>
+</body>
+</html>

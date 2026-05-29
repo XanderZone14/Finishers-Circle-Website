@@ -4,184 +4,160 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Finishers Circle | The Premier Submission Tournament Series in Belize</title>
-  <meta name="description" content="Belize's premier submission-only tournament series. No points. No politics. Just finishes. Join the Finishers Circle." />
+  <meta name="description" content="Belize's premier submission-only tournament series. No points. No politics. Just finishes. The first platform in Central America that pays its athletes. Join the Finishers Circle." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Source+Sans+3:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <!-- GSAP + ScrollTrigger -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js" defer></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-  <!-- ======================== PRELOADER ======================== -->
-  <div id="preloader" aria-hidden="true" role="status" aria-label="Loading">
-    <img src="media/main-logo.png" alt="Finishers Circle" class="pre-logo" />
-    <div class="pre-progress-track">
-      <div class="pre-bar" id="preBar"></div>
+<!-- 1. GLOBE INTRO (full-screen, pins while scrolling) -->
+<section id="globeIntro" class="globe-intro">
+  <canvas id="globeCanvas"></canvas>
+  <div class="globe-ui">
+    <div class="globe-belize-tag" id="belizeTag" aria-hidden="true">
+      <span class="belize-dot"></span>BELIZE
     </div>
-    <div class="pre-count" id="preCount">0%</div>
-    <button class="pre-skip" id="preSkip" aria-label="Skip intro">SKIP INTRO</button>
+    <div class="globe-logo-reveal" id="globeLogoReveal">
+      <img src="media/main-logo.png" alt="Finishers Circle">
+      <p class="globe-tagline">THE PREMIER SUBMISSION SERIES</p>
+    </div>
+    <div class="globe-scroll-hint" id="globeScrollHint">
+      <span>SCROLL TO ENTER</span>
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="7 13 12 18 17 13"/><polyline points="7 6 12 11 17 6"/></svg>
+    </div>
   </div>
+</section>
 
-  <!-- CUSTOM CURSOR -->
-  <div id="cursor" aria-hidden="true"></div>
-  <div id="cursor-follower" aria-hidden="true"></div>
+<!-- 2. ARENA CANVAS (fixed, behind all content) -->
+<canvas id="arenaCanvas" class="arena-bg" aria-hidden="true"></canvas>
 
-  <!-- FILM GRAIN OVERLAY -->
+<!-- 3. SITE WRAPPER (fades in after globe) -->
+<div id="siteWrapper" class="site-wrapper">
+
+  <!-- FILM GRAIN -->
   <div class="noise-overlay" aria-hidden="true"></div>
 
   <!-- SCROLL PROGRESS -->
   <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
 
-  <!-- ======================== HEADER ======================== -->
+  <!-- CUSTOM CURSOR -->
+  <div id="cursor" aria-hidden="true"></div>
+  <div id="cursor-follower" aria-hidden="true"></div>
+
+  <!-- HEADER -->
   <header class="main-header" id="mainHeader">
-    <a href="index.html" class="nav-brand" aria-label="Finishers Circle Home">
+    <a href="index.html" class="nav-brand">
       <img src="media/mini-logo.png" alt="Finishers Circle" class="nav-logo">
     </a>
-
     <nav class="navbar" id="mainNav" aria-label="Main navigation">
       <ul class="nav-list">
-        <li><a href="#hero" class="nav-link">Home</a></li>
-        <li><a href="#about" class="nav-link">About</a></li>
-        <li class="dropdown">
-          <button class="nav-link dropdown-trigger" aria-expanded="false" aria-haspopup="true">
-            Tournaments
-            <svg class="chevron" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
-          </button>
-          <ul class="dropdown-menu" role="menu">
-            <li><a href="#tournaments" role="menuitem">Upcoming Events</a></li>
-            <li><a href="gallery.html" role="menuitem">Past Results</a></li>
-            <li><a href="#register" role="menuitem" class="register-menu-item">Registration</a></li>
-          </ul>
-        </li>
-        <li><a href="gallery.html" class="nav-link">Gallery</a></li>
-        <li><a href="#contact" class="nav-link">Contact</a></li>
+        <li><a href="#hero" class="nav-link arena-trigger" data-view="center">Home</a></li>
+        <li><a href="about.html" class="nav-link arena-trigger" data-view="sideline">About</a></li>
+        <li><a href="#tournaments" class="nav-link arena-trigger" data-view="corner">Tournaments</a></li>
+        <li><a href="gallery.html" class="nav-link arena-trigger" data-view="elevated">Gallery</a></li>
+        <li><a href="registration.html" class="nav-link arena-trigger" data-view="entrance">Register</a></li>
+        <li><a href="contact.html" class="nav-link arena-trigger" data-view="sideline">Contact</a></li>
       </ul>
     </nav>
-
-    <button class="nav-register-btn magnetic" id="openRegisterModal">Register Now</button>
-
-    <button class="hamburger" id="hamburger" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mobileMenu">
-      <span></span>
-      <span></span>
-      <span></span>
+    <a href="registration.html" class="nav-register-btn">Register Now</a>
+    <button class="hamburger" id="hamburger" aria-label="Open navigation" aria-expanded="false" aria-controls="mobileMenu">
+      <span></span><span></span><span></span>
     </button>
   </header>
 
   <!-- MOBILE MENU -->
-  <div class="mobile-menu" id="mobileMenu" aria-hidden="true" role="dialog" aria-label="Mobile navigation">
-    <button class="mobile-close" id="mobileClose" aria-label="Close navigation menu">
-      <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true" role="dialog">
+    <button class="mobile-close" id="mobileClose" aria-label="Close navigation">
+      <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
     </button>
-    <nav aria-label="Mobile navigation">
+    <nav>
       <ul class="mobile-nav-list">
         <li><a href="#hero" class="mobile-nav-link">Home</a></li>
-        <li><a href="#about" class="mobile-nav-link">About</a></li>
+        <li><a href="about.html" class="mobile-nav-link">About</a></li>
         <li><a href="#tournaments" class="mobile-nav-link">Tournaments</a></li>
         <li><a href="gallery.html" class="mobile-nav-link">Gallery</a></li>
-        <li><a href="#contact" class="mobile-nav-link">Contact</a></li>
+        <li><a href="registration.html" class="mobile-nav-link">Register</a></li>
+        <li><a href="contact.html" class="mobile-nav-link">Contact</a></li>
       </ul>
     </nav>
-    <button class="mobile-register-btn" id="mobileRegisterBtn">Register Now</button>
+    <a href="registration.html" class="mobile-register-btn">Register Now</a>
   </div>
   <div class="mobile-backdrop" id="mobileBackdrop" aria-hidden="true"></div>
 
-  <!-- ======================== HERO ======================== -->
-  <section class="hero" id="hero" aria-label="Hero section">
-    <canvas id="emberCanvas" aria-hidden="true"></canvas>
-    <video autoplay muted loop playsinline class="hero-video" aria-hidden="true">
-      <source src="media/background.mp4" type="video/mp4" />
-    </video>
-    <div class="hero-overlay" aria-hidden="true"></div>
-
+  <!-- HERO (revealed after globe) -->
+  <section class="hero" id="hero" aria-label="Hero">
     <div class="hero-content">
-      <img src="media/main-logo.png" alt="Finishers Circle" class="hero-logo" />
-
-      <div class="hero-manifesto" aria-label="No Points. No Politics. Just Finishes.">
-        <div class="manifesto-line">
-          <span class="m-word">NO</span>&nbsp;<span class="m-outline">POINTS.</span>
-        </div>
-        <div class="manifesto-line">
-          <span class="m-word">NO</span>&nbsp;<span class="m-outline">POLITICS.</span>
-        </div>
-        <div class="manifesto-line">
-          <span class="m-word">JUST</span>&nbsp;<span class="m-red">FINISHES.</span>
-        </div>
+      <img src="media/main-logo.png" alt="Finishers Circle" class="hero-logo">
+      <div class="hero-manifesto">
+        <div class="manifesto-line"><span class="m-word">NO</span>&nbsp;<span class="m-outline">POINTS.</span></div>
+        <div class="manifesto-line"><span class="m-word">NO</span>&nbsp;<span class="m-outline">POLITICS.</span></div>
+        <div class="manifesto-line"><span class="m-word">JUST</span>&nbsp;<span class="m-red">FINISHES.</span></div>
       </div>
-
-      <p class="hero-sub">The Ultimate Submission Series in Belize &mdash; Central America</p>
-
+      <p class="hero-sub">The Premier Submission Series in Belize &mdash; Central America</p>
       <div class="hero-ctas">
-        <button class="btn-gold magnetic" id="heroRegisterBtn">Register Now</button>
-        <a href="#tournaments" class="btn-ghost-line magnetic">View Events</a>
+        <a href="registration.html" class="btn-gold btn-lg magnetic">Register Now</a>
+        <a href="#tournaments" class="btn-ghost-line btn-lg magnetic">View Events</a>
       </div>
     </div>
-
-    <div class="hero-countdown" id="heroCountdown" aria-label="Countdown to next event">
+    <div class="hero-countdown" id="heroCountdown">
       <p class="countdown-label">Next Event In</p>
       <div class="countdown-timer" role="timer">
         <div class="cd-unit"><span id="cdDays">00</span><small>Days</small></div>
-        <span class="cd-sep" aria-hidden="true">:</span>
+        <span class="cd-sep">:</span>
         <div class="cd-unit"><span id="cdHours">00</span><small>Hours</small></div>
-        <span class="cd-sep" aria-hidden="true">:</span>
+        <span class="cd-sep">:</span>
         <div class="cd-unit"><span id="cdMins">00</span><small>Mins</small></div>
-        <span class="cd-sep" aria-hidden="true">:</span>
+        <span class="cd-sep">:</span>
         <div class="cd-unit"><span id="cdSecs">00</span><small>Secs</small></div>
       </div>
     </div>
-
-    <a href="#stats" class="scroll-cue" aria-label="Scroll to content">
-      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="7 13 12 18 17 13"/><polyline points="7 6 12 11 17 6"/></svg>
+    <a href="#stats" class="scroll-cue" aria-label="Scroll down">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><polyline points="7 13 12 18 17 13"/><polyline points="7 6 12 11 17 6"/></svg>
     </a>
   </section>
 
-  <!-- ======================== MARQUEE STRIP ======================== -->
+  <!-- MARQUEE -->
   <div class="marquee-section" aria-hidden="true">
     <div class="marquee-track">
-      <span class="marquee-content">SUBMISSION ONLY &nbsp;&middot;&nbsp; NO POINTS &nbsp;&middot;&nbsp; NO MERCY &nbsp;&middot;&nbsp; CENTRAL AMERICA &nbsp;&middot;&nbsp; BELIZE &nbsp;&middot;&nbsp; FINISHERS CIRCLE &nbsp;&middot;&nbsp; SUBMISSION ONLY &nbsp;&middot;&nbsp; NO POINTS &nbsp;&middot;&nbsp; NO MERCY &nbsp;&middot;&nbsp; CENTRAL AMERICA &nbsp;&middot;&nbsp; BELIZE &nbsp;&middot;&nbsp; FINISHERS CIRCLE &nbsp;&middot;&nbsp;</span>
-      <span class="marquee-content">SUBMISSION ONLY &nbsp;&middot;&nbsp; NO POINTS &nbsp;&middot;&nbsp; NO MERCY &nbsp;&middot;&nbsp; CENTRAL AMERICA &nbsp;&middot;&nbsp; BELIZE &nbsp;&middot;&nbsp; FINISHERS CIRCLE &nbsp;&middot;&nbsp; SUBMISSION ONLY &nbsp;&middot;&nbsp; NO POINTS &nbsp;&middot;&nbsp; NO MERCY &nbsp;&middot;&nbsp; CENTRAL AMERICA &nbsp;&middot;&nbsp; BELIZE &nbsp;&middot;&nbsp; FINISHERS CIRCLE &nbsp;&middot;&nbsp;</span>
+      <span class="marquee-content">SUBMISSION ONLY &nbsp;&middot;&nbsp; NO POINTS &nbsp;&middot;&nbsp; NO MERCY &nbsp;&middot;&nbsp; CENTRAL AMERICA &nbsp;&middot;&nbsp; BELIZE &nbsp;&middot;&nbsp; FIRST PLATFORM THAT PAYS ATHLETES &nbsp;&middot;&nbsp; FINISHERS CIRCLE &nbsp;&middot;&nbsp;</span>
+      <span class="marquee-content">SUBMISSION ONLY &nbsp;&middot;&nbsp; NO POINTS &nbsp;&middot;&nbsp; NO MERCY &nbsp;&middot;&nbsp; CENTRAL AMERICA &nbsp;&middot;&nbsp; BELIZE &nbsp;&middot;&nbsp; FIRST PLATFORM THAT PAYS ATHLETES &nbsp;&middot;&nbsp; FINISHERS CIRCLE &nbsp;&middot;&nbsp;</span>
     </div>
   </div>
 
-  <!-- ======================== STATS ======================== -->
-  <section class="stats-section" id="stats" aria-label="Key statistics">
+  <!-- STATS -->
+  <section class="stats-section" id="stats">
     <div class="container">
       <div class="stats-grid">
         <div class="stat-item">
-          <div class="stat-number-wrap">
-            <span class="stat-number" data-target="500">0</span><span class="stat-suffix">+</span>
-          </div>
+          <div class="stat-number-wrap"><span class="stat-number" data-target="50">0</span><span class="stat-suffix">+</span></div>
           <span class="stat-label">Athletes Competed</span>
         </div>
-        <div class="stat-divider" aria-hidden="true"></div>
+        <div class="stat-divider"></div>
         <div class="stat-item">
-          <div class="stat-number-wrap">
-            <span class="stat-number" data-target="8">0</span>
-          </div>
+          <div class="stat-number-wrap"><span class="stat-number" data-target="3">0</span></div>
           <span class="stat-label">Tournaments Held</span>
         </div>
-        <div class="stat-divider" aria-hidden="true"></div>
+        <div class="stat-divider"></div>
         <div class="stat-item">
-          <div class="stat-number-wrap">
-            <span class="stat-number" data-target="12">0</span>
-          </div>
-          <span class="stat-label">Countries Represented</span>
-        </div>
-        <div class="stat-divider" aria-hidden="true"></div>
-        <div class="stat-item">
-          <div class="stat-number-wrap">
-            <span class="stat-number" data-target="100">0</span><span class="stat-suffix">%</span>
-          </div>
+          <div class="stat-number-wrap"><span class="stat-number" data-target="100">0</span><span class="stat-suffix">%</span></div>
           <span class="stat-label">Submission Only</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <div class="stat-number-wrap"><span class="stat-number" data-target="1">0</span></div>
+          <span class="stat-label">Rule: FINISH</span>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ======================== ONE RULE ======================== -->
-  <section class="one-rule-section" id="one-rule" aria-label="One rule section">
+  <!-- ONE RULE -->
+  <section class="one-rule-section" id="one-rule">
     <div class="or-number" aria-hidden="true">01</div>
     <div class="container or-inner">
       <div class="or-label">ONE RULE:</div>
@@ -190,129 +166,107 @@
     </div>
   </section>
 
-  <!-- ======================== ABOUT ======================== -->
-  <section class="about-section" id="about" aria-label="About Finishers Circle">
-    <div class="about-img-col" style="background-image:url('media/about-hero.jpg')" aria-hidden="true"></div>
-    <div class="about-text-col">
-      <div class="about-text-inner">
+  <!-- ABOUT PREVIEW (links to about.html) -->
+  <section class="about-preview-section" id="about">
+    <div class="container about-preview-inner">
+      <div class="about-preview-text">
         <span class="section-label">Our Story</span>
         <h2 class="section-title about-title">BUILT FOR<br><span class="text-red">WARRIORS</span></h2>
-        <p class="about-body">
-          Finishers Circle is Belize's premier submission-only tournament series &mdash; created to showcase the true essence of Brazilian Jiu-Jitsu and combat sports. No points. No politics. Just pure competition.
-        </p>
-        <p class="about-body">
-          Our mission is to bring together the toughest grapplers from across Central America and let skill speak louder than words. Every event, every mat, every second &mdash; earned through technique, heart, and the relentless pursuit of the finish.
-        </p>
-        <div class="about-pillars">
-          <div class="pillar-item">
-            <svg class="pillar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            <span>Elite Competition</span>
-          </div>
-          <div class="pillar-item">
-            <svg class="pillar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
-            <span>Respect &amp; Honor</span>
-          </div>
-          <div class="pillar-item">
-            <svg class="pillar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
-            <span>Community First</span>
-          </div>
-        </div>
+        <p class="about-body">Finishers Circle is Belize's premier submission-only tournament series &mdash; and the <strong class="text-gold">first platform in Central America that pays its athletes</strong> for their performance. No points. No politics. Just pure competition.</p>
+        <p class="about-body">We built Finishers Circle to give fighters what they deserve: real money for real submissions, a stage worthy of their sacrifice, and a community built on respect for the craft.</p>
+        <a href="about.html" class="btn-ghost-line magnetic" style="margin-top:24px;display:inline-flex;">Read Our Full Story &rarr;</a>
+      </div>
+      <div class="about-preview-emblem" aria-hidden="true">
+        <div class="emblem-ring emblem-ring-1"></div>
+        <div class="emblem-ring emblem-ring-2"></div>
+        <div class="emblem-ring emblem-ring-3"></div>
+        <img src="media/main-logo.png" alt="" class="emblem-logo">
       </div>
     </div>
   </section>
 
-  <!-- ======================== TOURNAMENTS ======================== -->
-  <section class="tournaments-section" id="tournaments" aria-label="Upcoming tournaments">
+  <!-- TOURNAMENTS -->
+  <section class="tournaments-section" id="tournaments">
     <div class="container">
       <header class="section-header">
         <span class="section-label">On the Calendar</span>
-        <h2 class="section-title">Upcoming <span class="text-red">Events</span></h2>
+        <h2 class="section-title arena-trigger" data-view="corner">Upcoming <span class="text-red">Events</span></h2>
         <p class="section-desc">Secure your spot before divisions fill. All events are submission-only format.</p>
       </header>
-
       <div class="tournaments-grid">
 
-        <article class="tournament-card tilt-card featured" aria-label="Submission Series Vol. 4">
+        <article class="tournament-card tilt-card featured">
           <div class="card-badge badge-next">Next Event</div>
           <div class="card-top">
             <h3 class="card-title">Submission Series<br>Vol. 4</h3>
             <dl class="card-meta">
               <div class="meta-item">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-                <dt class="sr-only">Date</dt><dd>August 15, 2026</dd>
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                <dt class="sr-only">Date</dt><dd>June 20, 2026</dd>
               </div>
               <div class="meta-item">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
                 <dt class="sr-only">Location</dt><dd>Belmopan, Belize</dd>
               </div>
             </dl>
           </div>
           <div class="card-tags">
-            <span class="tag">No-Gi</span>
-            <span class="tag">All Belts</span>
-            <span class="tag">Open Weight</span>
+            <span class="tag">No-Gi</span><span class="tag">All Belts</span><span class="tag">Open Weight</span>
           </div>
           <div class="card-footer">
             <span class="spots-label">
-              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
               12 spots left
             </span>
-            <button class="btn-gold btn-sm register-event-btn" data-event="Submission Series Vol. 4 — Aug 15, 2026">Register</button>
+            <a href="registration.html" class="btn-gold btn-sm">Register</a>
           </div>
         </article>
 
-        <article class="tournament-card tilt-card" aria-label="Finishers Circle Open">
+        <article class="tournament-card tilt-card">
           <div class="card-badge badge-open">Registration Open</div>
           <div class="card-top">
             <h3 class="card-title">Finishers Circle<br>Open</h3>
             <dl class="card-meta">
               <div class="meta-item">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
                 <dt class="sr-only">Date</dt><dd>October 3, 2026</dd>
               </div>
               <div class="meta-item">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
                 <dt class="sr-only">Location</dt><dd>Belize City, Belize</dd>
               </div>
             </dl>
           </div>
           <div class="card-tags">
-            <span class="tag">Gi &amp; No-Gi</span>
-            <span class="tag">All Belts</span>
-            <span class="tag">Weight Divs</span>
+            <span class="tag">Gi &amp; No-Gi</span><span class="tag">All Belts</span><span class="tag">Weight Divs</span>
           </div>
           <div class="card-footer">
-            <span class="spots-label">
-              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
-              32 spots left
-            </span>
-            <button class="btn-gold btn-sm register-event-btn" data-event="Finishers Circle Open — Oct 3, 2026">Register</button>
+            <span class="spots-label">32 spots left</span>
+            <a href="registration.html" class="btn-gold btn-sm">Register</a>
           </div>
         </article>
 
-        <article class="tournament-card tilt-card" aria-label="Grand Championship 2026">
+        <article class="tournament-card tilt-card">
           <div class="card-badge badge-soon">Coming Soon</div>
           <div class="card-top">
             <h3 class="card-title">Grand Championship<br>2026</h3>
             <dl class="card-meta">
               <div class="meta-item">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
                 <dt class="sr-only">Date</dt><dd>December 5, 2026</dd>
               </div>
               <div class="meta-item">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
                 <dt class="sr-only">Location</dt><dd>Belmopan, Belize</dd>
               </div>
             </dl>
           </div>
           <div class="card-tags">
-            <span class="tag">No-Gi</span>
-            <span class="tag">Champions</span>
-            <span class="tag">Invite Only</span>
+            <span class="tag">No-Gi</span><span class="tag">Champions</span><span class="tag">Invite Only</span>
           </div>
           <div class="card-footer">
-            <span class="spots-label soon-text">Registration opens soon</span>
-            <button class="btn-ghost-line btn-sm" disabled aria-disabled="true">Coming Soon</button>
+            <span class="soon-text">Registration opens soon</span>
+            <button class="btn-ghost-line btn-sm" disabled>Coming Soon</button>
           </div>
         </article>
 
@@ -320,10 +274,8 @@
     </div>
   </section>
 
-  <!-- ======================== FIGHTER QUOTE ======================== -->
-  <section class="fighter-quote-section" aria-label="Fighter quote">
-    <div class="quote-bg" style="background-image:url('media/gallery5.jpg')" aria-hidden="true"></div>
-    <div class="quote-overlay" aria-hidden="true"></div>
+  <!-- FIGHTER QUOTE -->
+  <section class="fighter-quote-section">
     <div class="container quote-inner">
       <div class="quote-mark" aria-hidden="true">&ldquo;</div>
       <blockquote class="quote-text">
@@ -333,39 +285,35 @@
     </div>
   </section>
 
-  <!-- ======================== REGISTER CTA ======================== -->
-  <section class="cta-section" id="register" aria-label="Register for a tournament">
-    <div class="cta-bg-img" style="background-image:url('media/second-hero.jpg')" aria-hidden="true"></div>
-    <div class="cta-overlay" aria-hidden="true"></div>
-    <div class="container">
-      <div class="cta-inner">
-        <span class="section-label">Join the Circle</span>
-        <h2 class="cta-title">READY TO PROVE<br><span class="text-gold">YOURSELF?</span></h2>
-        <p class="cta-body">Registration is open for multiple divisions. Limited spots.<br>No points, no decisions &mdash; only finishes count.</p>
-        <button class="btn-gold btn-xl magnetic" id="ctaRegisterBtn">Register for a Tournament</button>
-      </div>
+  <!-- CTA -->
+  <section class="cta-section" id="register">
+    <div class="container cta-inner">
+      <span class="section-label">Join the Circle</span>
+      <h2 class="cta-title arena-trigger" data-view="entrance">READY TO PROVE<br><span class="text-gold">YOURSELF?</span></h2>
+      <p class="cta-body">Registration is open for multiple divisions. Limited spots.<br>No points, no decisions &mdash; only finishes count.</p>
+      <a href="registration.html" class="btn-gold btn-xl magnetic">Register for a Tournament</a>
     </div>
   </section>
 
-  <!-- ======================== GALLERY PREVIEW ======================== -->
-  <section class="gallery-preview-section" id="gallery-preview" aria-label="Gallery preview">
+  <!-- GALLERY PREVIEW -->
+  <section class="gallery-preview-section" id="gallery-preview">
     <div class="container">
       <header class="section-header">
         <span class="section-label">Action Shots</span>
-        <h2 class="section-title">From the <span class="text-red">Mat</span></h2>
+        <h2 class="section-title arena-trigger" data-view="elevated">From the <span class="text-red">Mat</span></h2>
       </header>
       <div class="preview-grid">
-        <a href="gallery.html" class="preview-item preview-large" aria-label="View gallery image 1">
-          <img src="media/gallery1.jpg" alt="Tournament competition action" loading="lazy" />
-          <div class="preview-hover" aria-hidden="true"></div>
+        <a href="gallery.html" class="preview-item preview-large">
+          <img src="media/gallery1.jpg" alt="Tournament action" loading="lazy">
+          <div class="preview-hover"></div>
         </a>
-        <a href="gallery.html" class="preview-item" aria-label="View gallery image 2">
-          <img src="media/gallery3.jpg" alt="Grappling match" loading="lazy" />
-          <div class="preview-hover" aria-hidden="true"></div>
+        <a href="gallery.html" class="preview-item">
+          <img src="media/gallery3.jpg" alt="Grappling match" loading="lazy">
+          <div class="preview-hover"></div>
         </a>
-        <a href="gallery.html" class="preview-item" aria-label="View gallery image 3">
-          <img src="media/gallery7.jpg" alt="Submission attempt" loading="lazy" />
-          <div class="preview-hover" aria-hidden="true"></div>
+        <a href="gallery.html" class="preview-item">
+          <img src="media/gallery7.jpg" alt="Submission attempt" loading="lazy">
+          <div class="preview-hover"></div>
         </a>
       </div>
       <div class="gallery-cta-wrap">
@@ -374,47 +322,41 @@
     </div>
   </section>
 
-  <!-- ======================== FOOTER / CONTACT ======================== -->
-  <footer class="site-footer" id="contact" aria-label="Site footer and contact information">
-    <div class="footer-bg-img" style="background-image:url('media/contact-hero.jpg')" aria-hidden="true"></div>
-    <div class="footer-overlay" aria-hidden="true"></div>
+  <!-- FOOTER -->
+  <footer class="site-footer" id="contact">
     <div class="container footer-content">
       <div class="footer-grid">
-
         <div class="footer-brand">
-          <img src="media/main-logo.png" alt="Finishers Circle" class="footer-logo" />
-          <p class="footer-tagline">The Premier Submission Series in Belize.<br>No points. No politics. Just finishes.</p>
+          <img src="media/main-logo.png" alt="Finishers Circle" class="footer-logo">
+          <p class="footer-tagline">The Premier Submission Series in Belize.<br>The first platform that pays its athletes.</p>
         </div>
-
         <nav class="footer-links" aria-label="Footer navigation">
           <h4 class="footer-heading">Quick Links</h4>
           <ul>
             <li><a href="#hero">Home</a></li>
-            <li><a href="#about">About</a></li>
+            <li><a href="about.html">About &amp; Mission</a></li>
             <li><a href="#tournaments">Tournaments</a></li>
             <li><a href="gallery.html">Gallery</a></li>
-            <li><a href="#contact">Contact</a></li>
+            <li><a href="registration.html">Register</a></li>
+            <li><a href="contact.html">Contact</a></li>
           </ul>
         </nav>
-
         <address class="footer-contact">
           <h4 class="footer-heading">Get in Touch</h4>
           <div class="contact-item">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
             <a href="mailto:xanderbennett14@gmail.com">xanderbennett14@gmail.com</a>
           </div>
           <div class="contact-item">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.68A2 2 0 012 .18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.68A2 2 0 012 .18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
             <a href="tel:+16582183227">+1 (658) 218-3227</a>
           </div>
           <div class="contact-item">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
-            <a href="https://instagram.com/finisherscircle" target="_blank" rel="noopener noreferrer">@finisherscircle</a>
+            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            <a href="https://instagram.com/finisherscircle" target="_blank" rel="noopener">@finisherscircle</a>
           </div>
         </address>
-
       </div>
-
       <div class="footer-bottom">
         <p>&copy; 2026 Finishers Circle. All rights reserved.</p>
         <p>Belize City, Belize &middot; Submission-Only Tournament Series</p>
@@ -422,140 +364,8 @@
     </div>
   </footer>
 
-  <!-- ======================== REGISTRATION MODAL ======================== -->
-  <div class="modal-overlay" id="registerModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-    <div class="modal-container" role="document">
-      <button class="modal-close" id="modalClose" aria-label="Close registration form">
-        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
+</div><!-- /.site-wrapper -->
 
-      <!-- FORM VIEW -->
-      <div id="modalFormView">
-        <div class="modal-header">
-          <img src="media/mini-logo.png" alt="" class="modal-logo" aria-hidden="true" />
-          <h2 class="modal-title" id="modalTitle">Register for a Tournament</h2>
-          <p class="modal-subtitle">Secure your spot. Limited divisions available.</p>
-        </div>
-
-        <form class="register-form" id="registerForm" novalidate aria-label="Tournament registration form">
-          <input type="hidden" name="_subject" value="New Registration — Finishers Circle" />
-          <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" aria-hidden="true" />
-
-          <div class="form-row">
-            <div class="form-group">
-              <label for="r-firstName">First Name <span class="req" aria-hidden="true">*</span><span class="sr-only">(required)</span></label>
-              <input type="text" id="r-firstName" name="firstName" placeholder="John" autocomplete="given-name" required aria-required="true" aria-describedby="err-firstName" />
-              <span class="field-error" id="err-firstName" role="alert"></span>
-            </div>
-            <div class="form-group">
-              <label for="r-lastName">Last Name <span class="req" aria-hidden="true">*</span><span class="sr-only">(required)</span></label>
-              <input type="text" id="r-lastName" name="lastName" placeholder="Doe" autocomplete="family-name" required aria-required="true" aria-describedby="err-lastName" />
-              <span class="field-error" id="err-lastName" role="alert"></span>
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label for="r-email">Email Address <span class="req" aria-hidden="true">*</span><span class="sr-only">(required)</span></label>
-              <input type="email" id="r-email" name="email" placeholder="john@example.com" autocomplete="email" required aria-required="true" aria-describedby="err-email" />
-              <span class="field-error" id="err-email" role="alert"></span>
-            </div>
-            <div class="form-group">
-              <label for="r-phone">Phone Number <span class="req" aria-hidden="true">*</span><span class="sr-only">(required)</span></label>
-              <input type="tel" id="r-phone" name="phone" placeholder="+1 (000) 000-0000" autocomplete="tel" required aria-required="true" aria-describedby="err-phone" />
-              <span class="field-error" id="err-phone" role="alert"></span>
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label for="r-tournament">Tournament <span class="req" aria-hidden="true">*</span><span class="sr-only">(required)</span></label>
-              <div class="select-wrap">
-                <select id="r-tournament" name="tournament" required aria-required="true" aria-describedby="err-tournament">
-                  <option value="">Select a tournament…</option>
-                  <option value="Submission Series Vol. 4 — Aug 15, 2026">Submission Series Vol. 4 — Aug 15, 2026</option>
-                  <option value="Finishers Circle Open — Oct 3, 2026">Finishers Circle Open — Oct 3, 2026</option>
-                </select>
-                <svg class="select-arrow" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
-              </div>
-              <span class="field-error" id="err-tournament" role="alert"></span>
-            </div>
-            <div class="form-group">
-              <label for="r-belt">Belt Rank <span class="req" aria-hidden="true">*</span><span class="sr-only">(required)</span></label>
-              <div class="select-wrap">
-                <select id="r-belt" name="beltRank" required aria-required="true" aria-describedby="err-belt">
-                  <option value="">Select belt rank…</option>
-                  <option value="White Belt">White Belt</option>
-                  <option value="Blue Belt">Blue Belt</option>
-                  <option value="Purple Belt">Purple Belt</option>
-                  <option value="Brown Belt">Brown Belt</option>
-                  <option value="Black Belt">Black Belt</option>
-                </select>
-                <svg class="select-arrow" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
-              </div>
-              <span class="field-error" id="err-belt" role="alert"></span>
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label for="r-weight">Weight Division <span class="req" aria-hidden="true">*</span><span class="sr-only">(required)</span></label>
-              <div class="select-wrap">
-                <select id="r-weight" name="weightDivision" required aria-required="true" aria-describedby="err-weight">
-                  <option value="">Select weight division…</option>
-                  <option value="Rooster (Under 57.5kg)">Rooster (Under 57.5kg)</option>
-                  <option value="Light Feather (Under 64kg)">Light Feather (Under 64kg)</option>
-                  <option value="Feather (Under 70kg)">Feather (Under 70kg)</option>
-                  <option value="Light (Under 76kg)">Light (Under 76kg)</option>
-                  <option value="Middle (Under 82.3kg)">Middle (Under 82.3kg)</option>
-                  <option value="Medium Heavy (Under 88.3kg)">Medium Heavy (Under 88.3kg)</option>
-                  <option value="Heavy (Under 94.3kg)">Heavy (Under 94.3kg)</option>
-                  <option value="Super Heavy (Under 100.5kg)">Super Heavy (Under 100.5kg)</option>
-                  <option value="Ultra Heavy (Over 100.5kg)">Ultra Heavy (Over 100.5kg)</option>
-                  <option value="Open Weight">Open Weight</option>
-                </select>
-                <svg class="select-arrow" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
-              </div>
-              <span class="field-error" id="err-weight" role="alert"></span>
-            </div>
-            <div class="form-group">
-              <label for="r-team">Team / Academy</label>
-              <input type="text" id="r-team" name="team" placeholder="Your gym or team name" autocomplete="organization" />
-            </div>
-          </div>
-
-          <div class="form-group form-check-group">
-            <label class="check-label" for="r-waiver">
-              <input type="checkbox" id="r-waiver" name="waiver" required aria-required="true" aria-describedby="err-waiver" />
-              <span class="check-box" aria-hidden="true">
-                <svg viewBox="0 0 12 10" width="12" height="10" fill="none" stroke="white" stroke-width="2" aria-hidden="true"><polyline points="1 5 4.5 9 11 1"/></svg>
-              </span>
-              <span>I agree to the <button type="button" class="link-btn">waiver and competition rules</button>, and confirm I am physically fit to compete. <span class="req" aria-hidden="true">*</span></span>
-            </label>
-            <span class="field-error" id="err-waiver" role="alert"></span>
-          </div>
-
-          <button type="submit" class="btn-gold btn-lg submit-btn" id="submitBtn">
-            <span class="btn-label">Submit Registration</span>
-            <span class="btn-spinner" aria-hidden="true"></span>
-          </button>
-        </form>
-      </div>
-
-      <!-- SUCCESS VIEW -->
-      <div id="modalSuccessView" class="modal-success" hidden aria-live="polite">
-        <div class="success-icon-wrap" aria-hidden="true">
-          <svg viewBox="0 0 24 24" width="44" height="44" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-        </div>
-        <h3>Registration Submitted!</h3>
-        <p>Thank you for registering. We'll be in touch shortly with confirmation details and payment instructions.</p>
-        <div class="success-details" id="successDetails" aria-live="polite"></div>
-        <button class="btn-gold" id="successClose">Close</button>
-      </div>
-
-    </div>
-  </div>
-
-  <script src="main.js"></script>
+<script src="main.js"></script>
 </body>
 </html>

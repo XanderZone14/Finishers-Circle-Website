@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact | Finishers Circle</title>
+  <meta name="description" content="Contact Finishers Circle — Belize's premier submission-only grappling tournament series. Questions about registration, events, or media inquiries." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Source+Sans+3:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- ARENA CANVAS -->
+<canvas id="arenaCanvas" class="arena-bg" aria-hidden="true"></canvas>
+
+<!-- SITE WRAPPER -->
+<div id="siteWrapper" class="site-wrapper">
+
+  <!-- FILM GRAIN -->
+  <div class="noise-overlay" aria-hidden="true"></div>
+
+  <!-- SCROLL PROGRESS -->
+  <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+
+  <!-- CUSTOM CURSOR -->
+  <div id="cursor" aria-hidden="true"></div>
+  <div id="cursor-follower" aria-hidden="true"></div>
+
+  <!-- HEADER -->
+  <header class="main-header" id="mainHeader">
+    <a href="index.html" class="nav-brand">
+      <img src="media/mini-logo.png" alt="Finishers Circle" class="nav-logo">
+    </a>
+    <nav class="navbar" id="mainNav" aria-label="Main navigation">
+      <ul class="nav-list">
+        <li><a href="index.html" class="nav-link arena-trigger" data-view="center">Home</a></li>
+        <li><a href="about.html" class="nav-link arena-trigger" data-view="sideline">About</a></li>
+        <li><a href="index.html#tournaments" class="nav-link arena-trigger" data-view="corner">Tournaments</a></li>
+        <li><a href="gallery.html" class="nav-link arena-trigger" data-view="elevated">Gallery</a></li>
+        <li><a href="registration.html" class="nav-link arena-trigger" data-view="entrance">Register</a></li>
+        <li><a href="contact.html" class="nav-link active arena-trigger" data-view="sideline">Contact</a></li>
+      </ul>
+    </nav>
+    <a href="registration.html" class="nav-register-btn">Register Now</a>
+    <button class="hamburger" id="hamburger" aria-label="Open navigation" aria-expanded="false" aria-controls="mobileMenu">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true" role="dialog">
+    <button class="mobile-close" id="mobileClose" aria-label="Close navigation">
+      <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <nav>
+      <ul class="mobile-nav-list">
+        <li><a href="index.html" class="mobile-nav-link">Home</a></li>
+        <li><a href="about.html" class="mobile-nav-link">About</a></li>
+        <li><a href="index.html#tournaments" class="mobile-nav-link">Tournaments</a></li>
+        <li><a href="gallery.html" class="mobile-nav-link">Gallery</a></li>
+        <li><a href="registration.html" class="mobile-nav-link">Register</a></li>
+        <li><a href="contact.html" class="mobile-nav-link">Contact</a></li>
+      </ul>
+    </nav>
+    <a href="registration.html" class="mobile-register-btn">Register Now</a>
+  </div>
+  <div class="mobile-backdrop" id="mobileBackdrop" aria-hidden="true"></div>
+
+  <!-- PAGE HERO -->
+  <section class="page-hero" aria-label="Contact hero">
+    <div class="page-hero-inner container">
+      <span class="section-label">Reach Out</span>
+      <h1 class="page-hero-title">GET IN <span class="text-red">TOUCH</span></h1>
+      <p class="page-hero-sub">Questions, media inquiries, or just want to talk grappling &mdash; we're here.</p>
+    </div>
+  </section>
+
+  <!-- CONTACT COLUMNS -->
+  <section class="contact-section inner-section">
+    <div class="container contact-grid">
+
+      <!-- CONTACT FORM -->
+      <div class="contact-form-col reveal-up">
+        <span class="section-label">Send a Message</span>
+        <h2 class="section-title">LET'S <span class="text-red">TALK</span></h2>
+        <form id="contactForm" class="contact-form" novalidate>
+          <div class="form-group">
+            <label class="form-label" for="c-name">Your Name <span class="req" aria-hidden="true">*</span></label>
+            <input class="form-input" type="text" id="c-name" name="name" autocomplete="name" required placeholder="Alexander Bennett" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="c-email">Email Address <span class="req" aria-hidden="true">*</span></label>
+            <input class="form-input" type="email" id="c-email" name="email" autocomplete="email" required placeholder="you@example.com" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="c-subject">Subject</label>
+            <select class="form-input form-select" id="c-subject" name="subject">
+              <option value="" disabled selected>What's this about?</option>
+              <option value="General Inquiry">General Inquiry</option>
+              <option value="Registration Help">Registration Help</option>
+              <option value="Sponsorship / Partnership">Sponsorship / Partnership</option>
+              <option value="Media / Photography">Media / Photography</option>
+              <option value="Venue / Logistics">Venue / Logistics</option>
+              <option value="Athlete Feedback">Athlete Feedback</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="c-message">Message <span class="req" aria-hidden="true">*</span></label>
+            <textarea class="form-input form-textarea" id="c-message" name="message" rows="6" required placeholder="Tell us what's on your mind..."></textarea>
+          </div>
+          <button type="submit" id="contactSubmitBtn" class="btn-gold btn-lg btn-full magnetic">
+            <span class="btn-label">Send Message</span>
+            <span class="btn-spinner" aria-hidden="true"></span>
+          </button>
+          <div id="contactSuccess" class="contact-success" hidden>
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+            Message sent. We'll get back to you within 24 hours.
+          </div>
+        </form>
+      </div>
+
+      <!-- CONTACT INFO -->
+      <div class="contact-info-col">
+        <span class="section-label reveal-up">Contact Information</span>
+        <h2 class="section-title reveal-up">FIND <span class="text-red">US</span></h2>
+
+        <div class="contact-info-card reveal-up">
+          <div class="contact-info-item">
+            <div class="contact-info-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            </div>
+            <div>
+              <div class="contact-info-label">Email</div>
+              <a href="mailto:xanderbennett14@gmail.com" class="contact-info-value">xanderbennett14@gmail.com</a>
+            </div>
+          </div>
+          <div class="contact-info-item">
+            <div class="contact-info-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.68A2 2 0 012 .18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+            </div>
+            <div>
+              <div class="contact-info-label">Phone / WhatsApp</div>
+              <a href="tel:+16582183227" class="contact-info-value">+1 (658) 218-3227</a>
+            </div>
+          </div>
+          <div class="contact-info-item">
+            <div class="contact-info-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            </div>
+            <div>
+              <div class="contact-info-label">Instagram</div>
+              <a href="https://instagram.com/finisherscircle" target="_blank" rel="noopener" class="contact-info-value">@finisherscircle</a>
+            </div>
+          </div>
+          <div class="contact-info-item">
+            <div class="contact-info-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <div>
+              <div class="contact-info-label">Location</div>
+              <span class="contact-info-value">Belize City &amp; Belmopan, Belize</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- MAP PLACEHOLDER -->
+        <div class="map-placeholder reveal-up" aria-label="Map showing Belize City, Belize">
+          <div class="map-inner">
+            <div class="map-grid" aria-hidden="true">
+              <div class="map-line map-line-h map-line-h-1"></div>
+              <div class="map-line map-line-h map-line-h-2"></div>
+              <div class="map-line map-line-h map-line-h-3"></div>
+              <div class="map-line map-line-v map-line-v-1"></div>
+              <div class="map-line map-line-v map-line-v-2"></div>
+              <div class="map-line map-line-v map-line-v-3"></div>
+            </div>
+            <div class="map-pin" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+              </svg>
+            </div>
+            <div class="map-label">BELIZE CITY, BELIZE</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FAQ SECTION -->
+  <section class="inner-section faq-section" id="faq">
+    <div class="container">
+      <header class="section-header">
+        <span class="section-label">Common Questions</span>
+        <h2 class="section-title">FREQUENTLY ASKED <span class="text-red">QUESTIONS</span></h2>
+      </header>
+      <div class="faq-grid reveal-stagger">
+
+        <details class="faq-item reveal-item">
+          <summary class="faq-question">
+            <span>How does submission-only format work? What happens if nobody submits?</span>
+            <svg class="faq-chevron" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          </summary>
+          <div class="faq-answer">
+            <p>In submission-only format, the only way to win is by submission — no judges, no points, no decisions. If a regulation period ends without a submission, the match goes into overtime. In overtime, each competitor starts in a compromised position (back take, mounted triangle, etc.) and must either escape or submit. If neither athlete submits in overtime rounds, the match is declared a draw. We prefer a draw over a bad decision every time.</p>
+          </div>
+        </details>
+
+        <details class="faq-item reveal-item">
+          <summary class="faq-question">
+            <span>Can I compete if I've never entered a tournament before?</span>
+            <svg class="faq-chevron" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          </summary>
+          <div class="faq-answer">
+            <p>Absolutely. Finishers Circle is open to all experience levels. We have divisions specifically designed for beginners and white belts. Our No-Gi Beginner division is perfect for athletes with under one year of training. We encourage first-time competitors — the only way to grow is to compete. Come test yourself in a safe, professionally run environment.</p>
+          </div>
+        </details>
+
+        <details class="faq-item reveal-item">
+          <summary class="faq-question">
+            <span>How does athlete pay work? Who is eligible?</span>
+            <svg class="faq-chevron" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          </summary>
+          <div class="faq-answer">
+            <p>Finishers Circle is the first tournament series in Central America to offer direct athlete compensation. Prize money is distributed to division winners and — in featured matches — to both submission bonuses and event winners. The total prize pool is announced prior to each event and scales with registration numbers. Details for each tournament's prize structure are shared on our Instagram and emailed to registered competitors.</p>
+          </div>
+        </details>
+
+        <details class="faq-item reveal-item">
+          <summary class="faq-question">
+            <span>What is the refund and cancellation policy?</span>
+            <svg class="faq-chevron" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          </summary>
+          <div class="faq-answer">
+            <p>We understand that life happens. Registration fees are fully refundable up to 14 days before the event date. Within 14 days but before 7 days out, we offer a 50% refund or a transfer credit to a future Finishers Circle event. Within the final 7 days, fees are non-refundable but credits may be issued at the organizer's discretion for medical emergencies with documentation. Contact us directly to discuss your situation — we work with competitors whenever possible.</p>
+          </div>
+        </details>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <img src="media/main-logo.png" alt="Finishers Circle" class="footer-logo">
+          <p class="footer-tagline">The Premier Submission Series in Belize.<br>The first platform that pays its athletes.</p>
+        </div>
+        <nav class="footer-links" aria-label="Footer navigation">
+          <h4 class="footer-heading">Quick Links</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About &amp; Mission</a></li>
+            <li><a href="index.html#tournaments">Tournaments</a></li>
+            <li><a href="gallery.html">Gallery</a></li>
+            <li><a href="registration.html">Register</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </nav>
+        <address class="footer-contact">
+          <h4 class="footer-heading">Get in Touch</h4>
+          <div class="contact-item">
+            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            <a href="mailto:xanderbennett14@gmail.com">xanderbennett14@gmail.com</a>
+          </div>
+          <div class="contact-item">
+            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.68A2 2 0 012 .18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+            <a href="tel:+16582183227">+1 (658) 218-3227</a>
+          </div>
+          <div class="contact-item">
+            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            <a href="https://instagram.com/finisherscircle" target="_blank" rel="noopener">@finisherscircle</a>
+          </div>
+        </address>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Finishers Circle. All rights reserved.</p>
+        <p>Belize City, Belize &middot; Submission-Only Tournament Series</p>
+      </div>
+    </div>
+  </footer>
+
+</div><!-- /.site-wrapper -->
+
+<script src="main.js"></script>
+<script>
+  // Contact form basic handling
+  document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('contactForm');
+    const successEl = document.getElementById('contactSuccess');
+    const submitBtn = document.getElementById('contactSubmitBtn');
+    if (!form) return;
+
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const name    = document.getElementById('c-name').value.trim();
+      const email   = document.getElementById('c-email').value.trim();
+      const message = document.getElementById('c-message').value.trim();
+      if (!name || !email || !message) return;
+
+      if (submitBtn) submitBtn.classList.add('loading');
+
+      await new Promise(r => setTimeout(r, 1000));
+
+      if (submitBtn) submitBtn.classList.remove('loading');
+      if (successEl) {
+        successEl.removeAttribute('hidden');
+        form.reset();
+      }
+    });
+  });
+</script>
+</body>
+</html>
