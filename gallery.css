@@ -4,47 +4,55 @@
 
 /* ── DESIGN TOKENS (mirror from styles.css) ── */
 :root {
-  --red:        #dc2626;
-  --red-bright: #ef4444;
-  --red-glow:   rgba(220, 38, 38, 0.35);
-  --red-border: rgba(220, 38, 38, 0.22);
+  --black:      #000000;
+  --deep:       #080808;
+  --surface:    #111111;
+  --card:       #161616;
+  --red:        #cc0000;
+  --red-hot:    #ff2020;
+  --red-bright: #ff2020;
+  --red-glow:   rgba(204, 0, 0, 0.35);
+  --red-border: rgba(204, 0, 0, 0.22);
+  --gold:       #ca8a04;
+  --gold-light: #f0b429;
+  --white:      #ffffff;
+  --gray:       #888888;
+  --border:     rgba(255,255,255,0.06);
 
-  --bg-0:  #080808;
-  --bg-1:  #101010;
-  --bg-2:  #181818;
-  --bg-3:  #222222;
-  --card:  rgba(255, 255, 255, 0.035);
+  --bg-0:   #000000;
+  --bg-1:   #080808;
+  --bg-2:   #111111;
+  --bg-3:   #161616;
 
   --text-1: #ffffff;
   --text-2: #c0c0c0;
-  --text-3: #6b7280;
+  --text-3: #888888;
 
-  --border:  rgba(255, 255, 255, 0.07);
+  --radius:    10px;
+  --radius-lg: 18px;
 
-  --radius:    12px;
-  --radius-lg: 20px;
-
-  --font-display: 'Barlow Condensed', sans-serif;
-  --font-body:    'Barlow', sans-serif;
+  --font-display: 'Bebas Neue', sans-serif;
+  --font-body:    'Source Sans 3', sans-serif;
 
   --ease-out:    cubic-bezier(0.22, 1, 0.36, 1);
   --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
 
-  --nav-h: 72px;
-  --container: 1200px;
+  --nav-h:     72px;
+  --container: 1240px;
 }
 
 /* ── RESET ── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 body {
-  background: var(--bg-0);
+  background: var(--black);
   color: var(--text-1);
   font-family: var(--font-body);
   font-size: 1rem;
-  line-height: 1.6;
+  line-height: 1.65;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 img { display: block; max-width: 100%; }
 a { color: inherit; text-decoration: none; }
@@ -93,15 +101,15 @@ ul { list-style: none; }
   align-items: center;
   justify-content: space-between;
   padding: 0 clamp(20px, 4vw, 56px);
-  background: rgba(8, 8, 8, 0.92);
+  background: rgba(0, 0, 0, 0.9);
   border-bottom: 1px solid var(--border);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   z-index: 9000;
   transition: background 0.35s ease;
 }
 .main-header.scrolled {
-  background: rgba(8, 8, 8, 0.97);
+  background: rgba(0, 0, 0, 0.97);
 }
 .nav-brand { display: flex; align-items: center; flex-shrink: 0; }
 .nav-logo {
