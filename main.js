@@ -9,7 +9,10 @@
 const el  = id  => document.getElementById(id);
 const qs  = (s, ctx = document) => ctx.querySelector(s);
 const qsa = sel => [...document.querySelectorAll(sel)];
-const isMobile = () => window.innerWidth < 768;
+// iPadOS 13+ reports platform as 'MacIntel' but has maxTouchPoints > 1
+const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+              (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+const isMobile = () => window.innerWidth < 768 || isIOS;
 const RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 /* =========================================================
