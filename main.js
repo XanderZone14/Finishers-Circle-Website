@@ -820,6 +820,9 @@ function initSiteAnimations() {
 
   if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
     gsap.registerPlugin(ScrollTrigger);
+    // Ensure ScrollTrigger knows the current scroll position (especially
+    // important when called mid-scroll after the globe intro completes).
+    setTimeout(() => ScrollTrigger.refresh(), 50);
   }
 
   initArena();
@@ -1125,6 +1128,29 @@ function initSectionReveals() {
   // Generic inner-page reveals
   revealAll('.reveal-up',    { stagger: 0.1 });
   revealAll('.reveal-stagger .reveal-item', { stagger: 0.15 });
+
+  // After the globe intro the user is already scrolled deep —
+  // refresh forces ScrollTrigger to re-evaluate all positions and
+  // immediately fire any triggers the user has already scrolled past.
+  requestAnimationFrame(() => {
+    setTimeout(() => ScrollTrigger.refresh(), 150);
+  });
+
+  // Hard fallback: any element still at opacity:0 after 2s becomes visible.
+  const REVEAL_SELECTORS = [
+    '.stat-item', '.tournament-card', '.or-label', '.or-title', '.or-body',
+    '.about-preview-text', '.about-preview-emblem', '.quote-text', '.quote-author',
+    '.cta-inner', '.preview-item', '.footer-grid',
+  ];
+  setTimeout(() => {
+    REVEAL_SELECTORS.forEach(sel => {
+      qsa(sel).forEach(elem => {
+        if (parseFloat(getComputedStyle(elem).opacity) < 0.1) {
+          gsap.to(elem, { opacity: 1, y: 0, x: 0, duration: 0.5, ease: 'power2.out' });
+        }
+      });
+    });
+  }, 2000);
 }
 
 /* ── Smooth scroll for anchor links ── */
