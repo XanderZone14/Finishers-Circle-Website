@@ -1019,8 +1019,14 @@ address { font-style: normal; }
 }
 .tournaments-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 20px;
+}
+@media (min-width: 1100px) {
+  .tournaments-grid { grid-template-columns: repeat(4, 1fr); }
+}
+@media (max-width: 700px) {
+  .tournaments-grid { grid-template-columns: 1fr; }
 }
 .tournament-card {
   background: var(--card);
@@ -1065,9 +1071,11 @@ address { font-style: normal; }
   letter-spacing: 0.14em;
   text-transform: uppercase;
 }
-.badge-next { background: rgba(204,0,0,0.18); color: var(--red-hot); border: 1px solid rgba(204,0,0,0.3); }
-.badge-open { background: rgba(34,197,94,0.1); color: #4ade80; border: 1px solid rgba(34,197,94,0.22); }
-.badge-soon { background: rgba(255,255,255,0.04); color: var(--gray); border: 1px solid var(--border); }
+.badge-next   { background: rgba(204,0,0,0.18); color: var(--red-hot); border: 1px solid rgba(204,0,0,0.3); }
+.badge-open   { background: rgba(34,197,94,0.1); color: #4ade80; border: 1px solid rgba(34,197,94,0.22); }
+.badge-soon   { background: rgba(255,255,255,0.04); color: var(--gray); border: 1px solid var(--border); }
+.badge-past   { background: rgba(255,255,255,0.04); color: rgba(255,255,255,0.32); border: 1px solid rgba(255,255,255,0.08); }
+.badge-closed { background: rgba(245,158,11,0.12); color: #f59e0b; border: 1px solid rgba(245,158,11,0.3); }
 
 .card-top { flex: 1; }
 .card-title {
